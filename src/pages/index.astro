@@ -1,7 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+import model from "../scripts/contentfulModel";
+
+const promotedLands = await model.getPromotedLandsData();
 ---
 
 <BaseLayout pageTitle="Mua Bán Đất Vũng Tàu" currentPage="index">
-  index
+  index {promotedLands}
 </BaseLayout>
