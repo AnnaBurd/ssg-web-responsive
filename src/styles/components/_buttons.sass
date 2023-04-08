@@ -1,0 +1,51 @@
+/// Primary, secondary and transparent buttons
+.nice-btn
+    opacity: 1
+    height: 4rem
+    padding: 0 .8rem
+    border: 1px solid transparent
+    border-radius: var(--border-radius-medium)
+    font-family: var(--font-family-display)
+    font-size: 1.4rem
+    font-weight: 500
+    letter-spacing: -0.03em
+    color: var(--color-white)
+    cursor: pointer
+    border: none
+    backface-visibility: hidden
+    &:link,
+    &:visited,
+    &:hover
+        box-shadow: 0rem .4rem 1rem rgba(0, 0, 0, .1)
+    &:focus,
+    &:active
+        box-shadow: inset 0rem .4rem 1rem rgba(0, 0, 0, .2)
+    &--transparent
+        background: none
+        border: 1px solid var(--color-grey-light-1)
+        box-shadow: var(--shadow-medium)
+        color: inherit
+        font-weight: 600
+        &:focus,
+        &:active
+            box-shadow: inset 0rem .4rem 1rem rgba(0, 0, 0, .1)
+    &--primary
+        background-color: var(--color-primary) // Fallback in case gradient does not work
+        background: linear-gradient(156deg, var(--color-secondary) -170%, var(--color-primary)  180%)
+    &--secondary
+        background-color: var(--color-secondary)
+        background: linear-gradient(97.72deg, var(--color-secondary) -85.96%, var(--color-primary) 244.22%)
+
+/// Button with centered icon
+.nice-btn
+    &--call
+        display: grid
+        grid-template-columns: 2.1rem 1fr
+        gap: .1rem
+        align-items: center
+        overflow: hidden
+        svg
+            width: 100%
+            height: 100%
+            fill: currentColor
+

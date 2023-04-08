@@ -1,0 +1,117 @@
+---
+const { currentPage } = Astro.props;
+---
+
+<div class="navbar">
+  <div class="main-container navbar__content">
+    <div class="navbar__logo">
+      <a href="/">
+        <img src="/logo_name.svg" />
+      </a>
+    </div>
+    <nav class="navbar__navigation">
+      <ul class="navbar__list">
+        <li class="navbar__list-item">
+          <a
+            class={`navbar__link ${
+              currentPage === "index" ? "navbar__link--active" : ""
+            }`}
+            href="/">Trang chủ</a
+          >
+        </li>
+        <li class="navbar__list-item">
+          <a
+            class={`navbar__link ${
+              currentPage === "search" ? "navbar__link--active" : ""
+            }`}
+            href="/search">Tìm kiếm đất</a
+          >
+        </li>
+        <li class="navbar__list-item">
+          <a
+            class={`navbar__link ${
+              currentPage === "map" ? "navbar__link--active" : ""
+            }`}
+            href="/map">Xem trên bản đồ</a
+          >
+        </li>
+        <li class="navbar__list-item">
+          <a
+            class={`navbar__link ${
+              currentPage === "contacts" ? "navbar__link--active" : ""
+            }`}
+            href="/contacts">Liên hệ</a
+          >
+        </li>
+      </ul>
+    </nav>
+    <button
+      onclick="location.href='tel:+840901606982'"
+      class="nice-btn nice-btn--transparent nice-btn--call navbar__button"
+    >
+      <svg class="nice-btn__icon-call">
+        <use href="/icons.svg#phone"></use>
+      </svg>
+      +84 (09) 0160-6982</button
+    ><button
+      id="popupFormOpenBtn"
+      class="nice-btn nice-btn--primary navbar__button"
+      type="button"
+    >
+      Gọi lại cho tôi
+    </button>
+  </div>
+</div>
+<p>--- Navigation now on {currentPage}</p>
+
+<style lang="sass">
+  .navbar
+    background-color: var(--color-white)
+    box-shadow: var(--shadow-medium)
+    color: var(--color-grey-dark-1)
+    font-size: 1.3rem
+    &__content
+      height: var(--navbar-height)
+      display: flex
+      align-items: center
+      justify-content: end
+      flex-wrap: wrap
+    &__logo
+      margin-right: auto
+      margin-top: 1rem
+      &:hover
+        filter: drop-shadow(0rem .4rem 1rem rgba(0, 0, 0, .1))
+    &__navigation
+      margin-top: .1rem
+    &__list
+      display: flex
+      list-style-type: none
+    &__list-item
+    &__link
+      display: block
+      text-decoration: none
+      color: inherit
+      font-family: var(--font-family-display)
+      font-weight: 500
+      letter-spacing: -.01em
+      padding: .4rem .7rem
+      white-space: nowrap
+      // Gradient animation on hover
+      background: linear-gradient(to right, var(--color-grey-dark-1) 0%, var(--color-grey-dark-1) 30%, var(--color-primary) 40%, var(--color-secondary) 60%, var(--color-secondary) 100%)
+      background-clip: text
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+      text-fill-color: transparent
+      background-size: 300%
+      background-position: left
+      transition: background-position 0.4s ease // Transition on hover out
+      &:hover,
+      &--active
+        background-position: right
+        transition: background-position 1.1s ease-in-out // Transition on hover in
+
+    &__button
+      flex-shrink: 0
+      margin-left: .5rem
+      font-size: inherit
+</style>

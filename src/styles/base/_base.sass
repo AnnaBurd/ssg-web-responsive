@@ -1,0 +1,35 @@
+///////////////////////////           CSS Reset
+*, *::before, *::after
+    box-sizing: border-box // More-intuitive box-sizing model that includes border and padding in element width/height
+    margin: 0 // Remove default margin
+
+html
+    font-size: 62.5% // Set base for rem lenght units (for standart browser font size settings 16px, 1rem = 16px*62.5% = 10px)
+                     // So changing the font-size property automatically changes all rem-sized elements
+
+body
+    line-height: 1.5 // Accessible line height
+    -webkit-font-smoothing: antialiased // Improve font rendering (as of 2023 relevant mostly for MacOS users)
+    font-smoothing: antialiased  
+
+img, picture, video, canvas, svg // Simplify sizing of media assets
+    display: block
+    max-width: 100%
+
+input, button, textarea, select // Remove build-in typography styles
+    font: inherit
+
+////////////////////////           Base styles
+body
+    font-family: var(--font-family-sans-serif)
+    background-color: var(--color-grey-light-1)
+
+::selection
+    background-color: var(--color-secondary)
+    color: var(--color-white)
+
+.main-container
+    max-width: var(--container-width)
+    margin: 0 auto
+    padding-left: var(--container-padding)
+    padding-right: var(--container-padding)

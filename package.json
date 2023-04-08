@@ -1,0 +1,16 @@
+{
+  "name": "ssg-web-responsive",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --host",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^2.2.0",
+    "sass": "^1.61.0"
+  }
+}
