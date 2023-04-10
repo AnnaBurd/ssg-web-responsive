@@ -69,6 +69,9 @@ const { currentPage } = Astro.props;
     box-shadow: var(--shadow-medium)
     color: var(--color-grey-dark-1)
     font-size: 1.3rem
+    position: sticky
+    z-index: 1000
+    top: 0
     &__content
       height: var(--navbar-height)
       display: flex
@@ -96,7 +99,7 @@ const { currentPage } = Astro.props;
       padding: .4rem .7rem
       white-space: nowrap
       // Gradient animation on hover
-      background: linear-gradient(to right, var(--color-grey-dark-1) 0%, var(--color-grey-dark-1) 30%, var(--color-primary) 40%, var(--color-secondary) 60%, var(--color-secondary) 100%)
+      background: linear-gradient(to right, var(--color-grey-dark-1) 0%, var(--color-grey-dark-1) 30%, var(--color-primary) 40%, var(--color-intermediate-2) 60%, var(--color-intermediate-2) 100%)
       background-clip: text
       -webkit-background-clip: text
       -webkit-text-fill-color: transparent

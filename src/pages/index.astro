@@ -4,8 +4,86 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import model from "../scripts/contentfulModel";
 
 const promotedLands = await model.getPromotedLandsData();
+
+const heroImgURL =
+  "https://images.ctfassets.net/2lc6rsj68vep/4WP9lAVwO9AaH60gvkHfNY/60d980aa7e0c556ea4b63ee31aaee6c0/hero.jpg";
 ---
 
 <BaseLayout pageTitle="Mua Bán Đất Vũng Tàu" currentPage="index">
-  index {promotedLands}
+  <section class="hero">
+    <div class="hero__background">
+      <img
+        src={`${heroImgURL}?w=1600&f=top`}
+        srcset={`${heroImgURL}?fm=jpg&fl=progressive&w=2500&f=top 2500w,
+        ${heroImgURL}?fm=jpg&fl=progressive&w=1600&f=top 1600w,
+        ${heroImgURL}?fm=jpg&fl=progressive&w=1400&f=top 1400w,
+        ${heroImgURL}?fm=jpg&fl=progressive&w=1200&f=top 1200w,
+        ${heroImgURL}?fm=jpg&fl=progressive&w=900&f=top 900w,
+        ${heroImgURL}?fm=jpg&fl=progressive&w=600&f=top 600w`}
+        sizes="100vw"
+        alt="Background image"
+      />
+    </div>
+    <h1 class="hero__heading nice-h1">Nơi Hạnh Phúc Ngập Tràn</h1>
+    <p class="hero__text nice-p1">Hanh phuc la cai gi nua.</p>
+  </section>
+  <section class="lands">lands</section>
+  <section class="about-company">about company</section>
+  <footer>index {promotedLands[0]}</footer>
 </BaseLayout>
+
+<style lang="sass">
+  .hero
+    height: calc(80vh - var(--banner-height) - var(--navbar-height))
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    position: relative
+    &__heading, &__text
+      color: var(--color-white)
+      opacity: 0.95
+    &__heading
+      margin-top: -5%
+    &__background // Manually positioned image instead of css background in order to use html img srcset attribute
+      width: 100%
+      height: 100%
+      position: absolute
+      top: 0
+      z-index: -100
+      img
+        width: 100%
+        height: 100%
+        object-fit: cover
+        object-position: 50% 2%
+
+  .lands
+    height: 200vh
+
+  .about-company
+</style>
+
+<script>
+  import RunningTextlineView from "../scripts/views/runningTextlineView";
+
+  function init() {
+    console.log("Main Page is here!");
+
+    // Scroll functionality
+
+    // Running text line functionality
+    const textLineEl = document.querySelector(".hero__text");
+    const lines = [
+      "Hanh phuc la cai gi nua.",
+      "Hanh phuc la cai gi nua - 12.",
+      "Lorem ipsum :)",
+      "Any line you want to say",
+      "Rather long line line line tatadaadad yey",
+      "Văn bản góp ý của Quý Cơ quan gửi về Cục Thu thập dữ liệu và Ứng",
+    ];
+    let runningTextline = new RunningTextlineView(textLineEl, lines);
+    runningTextline.startAnimation();
+  }
+
+  init();
+</script>
