@@ -8,9 +8,9 @@ const landImgURL = land.images[0];
     <div class="land-card__photo">
       <img
         src={landImgURL || "/no_image.svg"}
-        srcset={`${landImgURL}?fm=jpg&fl=progressive&w=900&f=top 900w,
-        ${landImgURL}?fm=jpg&fl=progressive&w=700&f=top 700w,
-        ${landImgURL}?fm=jpg&fl=progressive&w=450&f=top 450w`}
+        srcset={`${landImgURL}?fm=jpg&fl=progressive&fit=fill&w=900&h=600&f=top 900w,
+        ${landImgURL}?fm=jpg&fl=progressive&fit=fill&w=700&h=460&f=top 700w,
+        ${landImgURL}?fm=jpg&fl=progressive&fit=fill&w=450&h=300&f=top 450w`}
         sizes="450px"
         alt="Background image"
         alt={`Photo of ${land.title}`}
@@ -36,6 +36,7 @@ const landImgURL = land.images[0];
     box-shadow: var(--shadow-medium)
     overflow: hidden
     position: relative
+    will-change: transform opacity
     &__photo
       width: 100%
       height: 90%
@@ -60,16 +61,15 @@ const landImgURL = land.images[0];
     &__parameters
       position: absolute
       top: -5rem
-      right: 1.4rem
-      transform: translateX(calc(100% + 1.5rem))
+      right: calc(-100% + 1.5rem)
       opacity: 0
-      transition: transform 0.4s 0.4s cubic-bezier(0.39, 0.58, 0.57, 1)
+      transition: right 0.5s cubic-bezier(0.39, 0.58, 0.57, 1) 0.4s // Transition: transform breaks in Chrome browser, so I animated absolute positioning property instead
     &:hover
       .land-card__photo
         transform: scale(1.2)
       .land-card__description
         transform: translateY(-100%)
       .land-card__parameters
-        transform: translateX(0)
+        right: 1.4rem
         opacity: 1
 </style>

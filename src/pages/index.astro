@@ -1,5 +1,7 @@
 ---
+import Infobox from "../components/Infobox.astro";
 import LandCard from "../components/LandCard.astro";
+
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 import model from "../scripts/contentfulModel";
@@ -42,11 +44,47 @@ const heroImgURL =
         >
       </p>
     </div>
-    <div class="lands__cards">
+    <div class="lands__cards grid">
       {promotedLands.map((land) => <LandCard land={land} />)}
     </div>
   </section>
-  <section class="about-company">about company</section>
+  <span class="decorative">
+    <svg class="decorative__top-left">
+      <use href="/icons.svg#ladder-top-left"></use>
+    </svg>
+  </span>
+  <section class="about-company main-container">
+    <div class="about-company__intro">
+      <h2 class="about-company__heading nice-h2">
+        Tại sao mua đất từ ​​chúng tôi
+      </h2>
+      <p class="about-company__text nice-p2">
+        Chúng tôi cung cấp các lô đất có giấy tờ chứng minh đầy đủ thuộc quyền
+        sở hữu của chúng tôi, vì vậy bạn không cần phải mất thời gian tìm kiếm
+        và tốn tiền hoa hồng từ môi giới và đại lý.
+      </p>
+    </div>
+    <div class="about-company__content grid">
+      <Infobox icon="house" title="Tìm đất tốt">
+        Tất cả các lô đất đã được các chuyên gia của chúng tôi kiểm tra đầy đủ
+        về mức độ tuân thủ pháp luật và cũng được bác sĩ chuyên khoa tâm thần
+        kiểm tra với những khuyến nghị tích cực.
+      </Infobox>
+      <Infobox icon="face_6" title="Mua ngay của chủ">
+        Các lô đất thuộc quyền sở hữu hoàn toàn của chúng tôi và sẵn sàng giao
+        dịch ngay hôm nay.
+      </Infobox>
+      <Infobox icon="description" title="Hồ sơ chuẩn bị đầy đủ">
+        Chúng tôi cung cấp tài liệu đầy đủ trên trang web để xem xét trước khi
+        giao dịch, cũng như bất kỳ thông tin bổ sung nào theo yêu cầu.
+      </Infobox>
+    </div>
+  </section>
+  <span class="decorative">
+    <svg class="decorative__bottom-right">
+      <use href="/icons.svg#ladder-bottom-right"></use>
+    </svg>
+  </span>
   <footer>index {promotedLands[0]}</footer>
 </BaseLayout>
 
@@ -82,16 +120,30 @@ const heroImgURL =
       display: flex
       flex-direction: column
       justify-content: flex-end
-    &__heading
-    &__text
       margin-bottom: 4vh
+    &__text
       max-width: 23rem
-    &__cards
-      display: grid
-      grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr))
-      grid-gap: var(--grid-gap-medium)
 
   .about-company
+    height: calc(100vh - var(--navbar-height))
+    display: flex
+    flex-direction: column
+    justify-content: center
+    &__intro
+      text-align: center
+      margin-top: -10rem
+      margin-bottom: 6vh
+    &__heading
+      // TODO typography - figure out nice color scheme
+      // background: linear-gradient(90deg, var(--color-secondary) -50%, var(--color-primary) 200%)
+      // -webkit-background-clip: text
+      // -webkit-text-fill-color: transparent
+      // background-clip: text
+      // text-fill-color: transparent
+    &__text
+      // color: var(--color-intermediate-3)
+      width: 60%
+      margin: 0 auto
 </style>
 
 <script>
@@ -113,7 +165,7 @@ const heroImgURL =
       "Văn bản góp ý của Quý Cơ quan gửi về Cục Thu thập dữ liệu và Ứng",
     ];
     let runningTextline = new RunningTextlineView(textLineEl, lines);
-    runningTextline.startAnimation();
+    // runningTextline.startAnimation();
   }
 
   init();

@@ -1,0 +1,59 @@
+---
+const { icon, title, contact } = Astro.props;
+---
+
+<!-- DEV TEST: Link to google API - material icons 
+    TODO - either remove link and add icons as svg sprites, or move link to the header in base layout,
+    choose depending on load performance -->
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet"
+/>
+
+<div class="info-box">
+  <div class="info-box__icon"><span class="material-icons">{icon}</span></div>
+  <h3 class="info-box__title nice-h3">{title}</h3>
+  <p class="info-box__text nice-p3"><slot /></p>
+</div>
+
+<style lang="sass">
+  .info-box
+    background-color: var(--color-grey-light-2)
+    border-radius: var(--border-radius-medium)
+    box-shadow: var(--shadow-medium)
+    display: grid
+    grid-template-rows: 6.4rem 5rem
+    justify-items: center
+    align-items: center
+    padding: 1.2rem 2.7rem 2.7rem
+    transition: transform .3s cubic-bezier(0.22, 0.61, 0.36, 1)
+    cursor: default
+    &__icon
+      background-color: var(--color-primary-light)
+      border-radius: var(--border-radius-medium)
+      width: 4.8rem
+      height: 4.8rem
+      display: flex
+      align-items: center
+      justify-content: center
+      span
+        font-size: 3.2rem
+        color: currentColor
+        background: linear-gradient(100deg, var(--color-secondary) -50%, var(--color-primary) 150%)
+        -webkit-background-clip: text
+        -webkit-text-fill-color: transparent
+        background-clip: text
+        text-fill-color: transparent
+    &__title
+      background: linear-gradient(90deg, var(--color-secondary) -50%, var(--color-primary) 200%)
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+      background-clip: text
+      text-fill-color: transparent
+    &__text
+      align-self: start
+      text-align: center
+      color: var(--color-intermediate-3)
+    &:hover
+      transform: scale(1.04) translate(0, -.4rem)
+</style>
