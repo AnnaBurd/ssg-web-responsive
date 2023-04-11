@@ -1,4 +1,5 @@
 ---
+import LandCard from "../components/LandCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 import model from "../scripts/contentfulModel";
@@ -27,7 +28,24 @@ const heroImgURL =
     <h1 class="hero__heading nice-h1">Nơi Hạnh Phúc Ngập Tràn</h1>
     <p class="hero__text nice-p1">Hanh phuc la cai gi nua.</p>
   </section>
-  <section class="lands">lands</section>
+  <section class="lands main-container">
+    <div class="lands__intro">
+      <h2 class="lands__heading nice-h2">Dự án hiện tại đang bán</h2>
+      <p class="lands__text nice-p2">
+        <a class="link-btn" href="/search"
+          >Công ty giới thiệu mấy dự án đất đang bán với tỷ giá và diện tích các
+          loại.<span class="link-btn__arrow-background"
+            ><svg class="link-btn__arrow-icon">
+              <use href="/icons.svg#arrow-link"></use>
+            </svg></span
+          ></a
+        >
+      </p>
+    </div>
+    <div class="lands__cards">
+      {promotedLands.map((land) => <LandCard land={land} />)}
+    </div>
+  </section>
   <section class="about-company">about company</section>
   <footer>index {promotedLands[0]}</footer>
 </BaseLayout>
@@ -58,7 +76,20 @@ const heroImgURL =
         object-position: 50% 2%
 
   .lands
-    height: 200vh
+    margin-bottom: 6vh
+    &__intro
+      height: 20vh
+      display: flex
+      flex-direction: column
+      justify-content: flex-end
+    &__heading
+    &__text
+      margin-bottom: 4vh
+      max-width: 23rem
+    &__cards
+      display: grid
+      grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr))
+      grid-gap: var(--grid-gap-medium)
 
   .about-company
 </style>

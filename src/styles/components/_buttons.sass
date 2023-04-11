@@ -49,3 +49,22 @@
             height: 100%
             fill: currentColor
 
+/// Button with animated arrow icon
+.link-btn
+    position: relative
+    &__arrow-background // Clickable area behind icon to prevent flickering on hover
+        width: 3rem
+        height: 2rem
+        position: absolute
+        bottom: -.2rem
+        right: -2.8rem
+    &__arrow-icon
+        width: 100%
+        height: 100%
+        fill: currentColor
+        transition: transform 0.3s ease-in-out
+        will-change: transform // hint to the browser that this element will be animated - element's rendering is hopefully delegated to the GPU
+    &:hover
+        transition: transform 0.2s ease
+        & .link-btn__arrow-icon
+            transform: translate(1.8rem, -.025rem) scale(1.1, 1.1)
