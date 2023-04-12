@@ -2,12 +2,13 @@
 import "../styles/main.sass";
 
 import Banner from "../components/Banner.astro";
+import Footer from "../components/Footer.astro";
 import Navigation from "../components/Navigation.astro";
 
 const { pageTitle, currentPage } = Astro.props;
 ---
 
-<html lang="vn">
+<html lang="vi">
   <head>
     <!-- TODO - Metatags for search engines-->
     <meta charset="utf-8" />
@@ -30,5 +31,6 @@ const { pageTitle, currentPage } = Astro.props;
     <main>
       <slot />
     </main>
+    <Footer />
   </body>
 </html>

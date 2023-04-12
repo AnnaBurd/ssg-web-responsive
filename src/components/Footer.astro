@@ -1,0 +1,63 @@
+---
+import Credits from "./Credits.astro";
+import SubscriptionForm from "./SubscriptionForm.astro";
+---
+
+<footer class="footer">
+  <div class="footer__content main-container grid">
+    <div class="footer__social-links align-column">
+      <div class="footer__icons">
+        <a href="#">
+          <svg class="footer__icon">
+            <use xlink:href="/icons.svg#facebook"></use>
+          </svg>
+        </a>
+        <a href="#">
+          <svg class="footer__icon">
+            <use xlink:href="/icons.svg#telegram"></use>
+          </svg>
+        </a>
+        <a href="#">
+          <svg class="footer__icon">
+            <use xlink:href="/icons.svg#zalo"></use>
+          </svg>
+        </a>
+      </div>
+      <p class="footer__text">
+        Hãy tận hưởng những dịch vụ của chúng tôi để tìm được mảnh đất tốt nhất,
+        xin cảm ơn!
+      </p>
+    </div>
+    <div></div>
+    <div class="footer__subscribe">
+      <SubscriptionForm />
+    </div>
+  </div>
+  <Credits />
+</footer>
+
+<style lang="sass">
+  .footer
+    background-color: var(--color-grey-light-2)
+    color: var(--color-grey-dark-2)
+    font-size: 1.2rem
+    font-weight: 400
+    line-height: 1.4em
+    &__content
+    &__social-links
+    &__icons
+      display: flex
+      align-items: center
+      align-self: end
+      margin-left: -0.85rem
+    &__icon
+      margin: .5rem
+      width: 3.3rem
+      height: 3.3rem
+      fill: var(--color-intermediate-1)
+      &:hover
+        opacity: 0.8
+    &__text
+      width: 80%
+    &__subscribe
+</style>

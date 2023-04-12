@@ -1,0 +1,46 @@
+<div class="subscription align-column">
+  <div class="subscription__title">Nhận ưu đãi mới qua email</div>
+  <div class="subscription__text">
+    Nhận ưu đãi mới nhất về đất nền bán và chiết khấu cũng như tin tức về quy
+    hoạch đất nền Bà Rịa Vũng Tàu:
+  </div>
+  <form
+    class="subscription__form"
+    name="subscriptionForm"
+    method="post"
+    data-netlify="true"
+    id="subscriptionForm"
+  >
+    <div class="subscription__input">
+      <input
+        type="email"
+        class="nice-input"
+        placeholder="Địa chỉ email"
+        name="email"
+        id="email-input"
+      />
+      <label for="email-input" class="nice-input__label">Địa chỉ email</label>
+    </div>
+    <button type="submit" class="nice-btn">Đăng ký</button>
+    <div class="subscription__message subscription__message--success">
+      Cảm ơn bạn đã đăng ký, chúng tôi đã thêm bạn vào danh sách gửi thư của
+      chúng tôi
+    </div>
+    <div class="subscription__message subscription__message--failure">
+      Rất tiếc, đã xảy ra lỗi, vui lòng thử lại sau
+    </div>
+  </form>
+</div>
+
+<style lang="sass">
+  .subscription
+    &__title
+      font-weight: 700
+      color: var(--color-grey-dark-1)
+      align-self: end
+      margin-bottom: .4rem
+    &__text
+    &__form
+
+    // background: blue
+</style>

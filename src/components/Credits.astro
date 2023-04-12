@@ -1,0 +1,33 @@
+<div class="credits">
+  <div class="credits__content main-container">
+    <div class="credits__text">
+      © Mua Bán Đất Vũng Tàu, 2022 - {new Date().getFullYear()}
+    </div>
+    <div class="credits__links">
+      <a class="credits__link" href="/404">Hỗ trợ</a>
+      <a class="credits__link" href="/404">Thông tin về công ty</a>
+      <a class="credits__link" href="/404">Liên hệ</a>
+    </div>
+  </div>
+</div>
+
+<style lang="sass">
+  .credits
+    background-color: var(--color-grey-light-1)
+    font-size: 1rem
+    font-weight: 400
+    letter-spacing: -.03em
+    padding: .7rem 0
+    &__content
+      display: flex
+      justify-content: space-between
+      align-items: center
+      opacity: .9
+    &__text
+    &__links
+    &__link
+      padding: 0rem 1rem
+      &:not(:first-child):not(:last-child)
+        border-left: 0.05em solid var(--color-grey-dark-4)
+        border-right: 0.05em solid var(--color-grey-dark-4)
+</style>
