@@ -11,36 +11,122 @@
     data-netlify="true"
     id="subscriptionForm"
   >
-    <div class="subscription__input">
+    <div class="subscription__input nice-input nice-input--btngroup">
       <input
+        required
         type="email"
-        class="nice-input"
+        class="nice-input__input"
         placeholder="Địa chỉ email"
         name="email"
         id="email-input"
+        oninvalid="this.setCustomValidity('Hãy điền địa chỉ email của bạn')"
       />
-      <label for="email-input" class="nice-input__label">Địa chỉ email</label>
+      <label for="email-input" class="nice-input__hint">Địa chỉ email</label>
+      <button
+        type="submit"
+        class="nice-btn nice-btn--secondary nice-input__submit-btn"
+        >Đăng ký</button
+      >
     </div>
-    <button type="submit" class="nice-btn">Đăng ký</button>
-    <div class="subscription__message subscription__message--success">
-      Cảm ơn bạn đã đăng ký, chúng tôi đã thêm bạn vào danh sách gửi thư của
-      chúng tôi
+    <div class="subscription__message subscription__message--success hidden">
+      <span class="subscription__message-text"
+        >Cảm ơn bạn đã đăng ký, chúng tôi đã thêm bạn vào danh sách gửi thư của
+        chúng tôi</span
+      >
     </div>
-    <div class="subscription__message subscription__message--failure">
-      Rất tiếc, đã xảy ra lỗi, vui lòng thử lại sau
+    <div class="subscription__message subscription__message--failure hidden">
+      <span class="subscription__message-text">
+        Rất tiếc, đã xảy ra lỗi, vui lòng thử lại sau
+      </span>
     </div>
   </form>
+
+  <style lang="sass">
+    .subscription
+      &__title
+        font-weight: 700
+        align-self: end
+        margin-bottom: .4rem
+      &__text
+        width: 80%
+      &__form
+        position: relative
+        margin-top: .6rem
+      &__input
+      &__message
+        position: absolute
+        top: -.4rem
+        left: -1rem
+        width: 115%
+        min-height: 5rem
+        padding: 1rem 1rem
+        background: var(--color-grey-light-2)
+        cursor: pointer
+      &__message-text
+        display: block
+        width: 80%
+      &__message--success
+        color: var(--color-success)
+      &__message--failure
+        color: var(--color-warning)
+  </style>
+
+  <script>
+    /* Form Submit functionality*/
+
+    const formEl = document.querySelector(".subscription__form");
+    const successMessageEl = document.querySelector(
+      ".subscription__message--success"
+    );
+    const failureMessageEl = document.querySelector(
+      ".subscription__message--failure"
+    );
+
+    /* On submit send data to backend and show response message */
+    const handleFormSubmit = (e) => {
+      e.preventDefault(); // Do not redirect to another page
+
+      // Get data from form's input field
+      const inputData = new FormData(e.target);
+
+      // Send data to backend (netlify)
+      fetch("/", {
+        method: "post",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(inputData).toString(),
+      })
+        .then((response) => {
+          // Check response status to make sure the submission was accepted by Netlify
+          if (response.ok) {
+            successMessageEl.classList.remove(`hidden`);
+          } else {
+            failureMessageEl.classList.remove(`hidden`);
+          }
+        })
+        .catch((error) => {
+          // Got no response from netlify (server or network connection is down)
+          failureMessageEl.classList.remove(`hidden`);
+        })
+        //  Finally on click hide success/failure message and clear form fields
+        .finally(() => {
+          formEl.addEventListener(
+            "click",
+            function (e) {
+              // Clean input fields and hide messages
+              formEl
+                .querySelectorAll(".nice-input__input")
+                .forEach((el) => (el.value = ""));
+
+              failureMessageEl.classList.add(`hidden`);
+              successMessageEl.classList.add(`hidden`);
+            },
+            { once: true }
+          );
+        });
+    };
+
+    document
+      .querySelector(".subscription__form")
+      .addEventListener("submit", handleFormSubmit);
+  </script>
 </div>
-
-<style lang="sass">
-  .subscription
-    &__title
-      font-weight: 700
-      color: var(--color-grey-dark-1)
-      align-self: end
-      margin-bottom: .4rem
-    &__text
-    &__form
-
-    // background: blue
-</style>
