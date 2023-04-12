@@ -92,14 +92,13 @@ const heroImgURL =
     height: calc(80vh - var(--banner-height) - var(--navbar-height))
     display: flex
     flex-direction: column
-    justify-content: center
     align-items: center
     position: relative
     &__heading, &__text
       color: var(--color-white)
-      opacity: 0.95
+      opacity: 0.96
     &__heading
-      margin-top: -5%
+      margin-top: 13vw // Margin measured in viewport width - works well with the used hero image
     &__background // Manually positioned image instead of css background in order to use html img srcset attribute
       width: 100%
       height: 100%
@@ -111,6 +110,13 @@ const heroImgURL =
         height: 100%
         object-fit: cover
         object-position: 50% 2%
+    @media only screen and (max-width:1200px)
+      &__heading
+        margin-top: 12vw
+        font-size: 4.8rem
+        line-height: 5.5rem
+      &__text
+        font-size: 1.3rem
 
   .lands
     margin-bottom: 6vh
@@ -119,7 +125,7 @@ const heroImgURL =
       display: flex
       flex-direction: column
       justify-content: flex-end
-      margin-bottom: 4vh
+      padding-bottom: 4vh
     &__text
       max-width: 23rem
 
@@ -133,6 +139,7 @@ const heroImgURL =
       margin-top: -10rem
       margin-bottom: 6vh
     &__heading
+      // text-align: center
       // TODO typography - figure out nice color scheme
       // background: linear-gradient(90deg, var(--color-secondary) -50%, var(--color-primary) 200%)
       // -webkit-background-clip: text
@@ -144,6 +151,14 @@ const heroImgURL =
       // color: var(--color-intermediate-3)
       width: 60%
       margin: 0 auto
+    @media only screen and (max-width: 750px)
+      height: max-content
+      // margin-top: max(2rem, 5vh)
+      &__intro
+        margin-top: max(2rem, 7vh)
+      &__content
+        margin-bottom: max(3.5rem, 7vh)
+    @media only screen and (max-width: 520px)
 </style>
 
 <script>

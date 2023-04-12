@@ -6,6 +6,10 @@
 html
     font-size: 62.5% // Set base for rem lenght units (for standart browser font size settings 16px, 1rem = 16px*62.5% = 10px)
                      // So changing the font-size property automatically changes all rem-sized elements
+    @media only screen and (max-width: 1100px) 
+        font-size: 56.25%
+    @media only screen and (max-width:950px) 
+        font-size: 50%
 
 body
     line-height: 1.5 // Accessible line height

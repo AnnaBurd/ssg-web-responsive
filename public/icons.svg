@@ -12,16 +12,16 @@
     <symbol id="telegram" viewBox="0 0 24 24">
         <path d="M2 12c0 5.523 4.477 10 10 10s10-4.477 10-10S17.523 2 12 2 2 6.477 2 12zm8.167 4.583.17-2.549 4.637-4.184c.203-.181-.045-.27-.315-.105l-5.723 3.61-2.472-.771c-.533-.164-.537-.53.12-.794l9.633-3.715c.44-.2.864.106.696.78l-1.64 7.73c-.114.549-.447.68-.906.427l-2.5-1.847-1.2 1.168-.012.011c-.134.131-.245.24-.488.24z"></path>
     </symbol>
-    <symbol id="ladder-top-left" viewBox="0 0 140 153" preserveAspectRatio="xMinYMid meet">
+    <symbol id="ladder-top-left" viewBox="0 0 140 153" preserveAspectRatio="xMinYMin meet">
         <path d="M140 0H0V153H45.8451V102.166H92.6761V50.8339H140V0Z"></path>
     </symbol>
-    <symbol id="ladder-bottom-left" viewBox="0 0 140 153" preserveAspectRatio="xMinYMid meet">
+    <symbol id="ladder-bottom-left" viewBox="0 0 140 153" preserveAspectRatio="xMinYMax meet">
         <path d="M140 153H-1V0H44.8451V50.8339H91.6761V102.166H139V153Z"></path>
     </symbol>
-    <symbol id="ladder-top-right" viewBox="0 0 140 153" preserveAspectRatio="xMaxYMid meet">
+    <symbol id="ladder-top-right" viewBox="0 0 140 153" preserveAspectRatio="xMaxYMin meet">
         <path d="M0 0H140V153H94.1549V102.166H47.3239V50.8339H0V0Z"></path>
     </symbol>
-    <symbol id="ladder-bottom-right" viewBox="0 0 140 153" preserveAspectRatio="xMaxYMid meet">
+    <symbol id="ladder-bottom-right" viewBox="0 0 140 153" preserveAspectRatio="xMaxYMax meet">
         <path d="M0 153H140V0H94.1549V50.8339H47.3239V102.166H0V153Z"></path>
     </symbol>
     <symbol id="arrow-right" viewBox="0 0 24 24">
