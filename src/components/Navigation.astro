@@ -9,7 +9,8 @@ const { currentPage } = Astro.props;
         <img src="/logo_name.svg" />
       </a>
     </div>
-    <nav class="navbar__navigation">
+
+    <nav class="navbar__navigation navbar__navigation--small">
       <ul class="navbar__list">
         <li class="navbar__list-item">
           <a
@@ -45,6 +46,11 @@ const { currentPage } = Astro.props;
         </li>
       </ul>
     </nav>
+    <div class="navbar__menu-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
     <button
       onclick="location.href='tel:+840901606982'"
       class="nice-btn nice-btn--transparent nice-btn--call navbar__button"
@@ -114,4 +120,74 @@ const { currentPage } = Astro.props;
       flex-shrink: 0
       margin-left: .5rem
       font-size: inherit
+
+  /* Navigation menu with hamburger button for small screens */
+  .navbar
+    /* Hamburger menu button - closed menu*/
+    &__navigation
+      // display: none
+    &__navigation--small
+      background: green
+      position: absolute
+      top: 0
+      right: -32rem
+      width: 30rem
+      padding: 5rem
+
+    &__list
+      flex-direction: column
+
+      // display: fixed
+      // top: 0
+    &__navigation--open
+      background: red
+      right: 0
+    &__menu-btn
+      order: 1 // Place last among other children within flexible container (default flex order = 0)
+      margin-top: .7rem
+      margin-left: 2rem
+      transform: scale(1.2)
+      position: relative
+      user-select: none
+      cursor: pointer
+      transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0)
+      span
+        background: var(--color-intermediate-4)
+        border-radius: var(--border-radius-medium)
+        display: block
+        width: 3.2rem
+        height: .4rem
+        margin-bottom: .6rem
+        transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0), background 0.5s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0.55s ease
+        &:first-child
+          transform-origin: 0% 0%
+        &:nth-child(2)
+          transform-origin: .4rem 0rem // Center point for transformations
+        &:last-child
+          transform-origin: 0% 100%
+
+    /* Hamburger menu button - opened menu*/
+    &__menu-btn--open
+      transform: translate(.5rem, .2rem)
+      span
+        background: var(--color-intermediate-3)
+        &:first-child
+          transform: rotate(45deg) translate(-2px, -1px)
+        &:nth-child(2)
+          transform: rotate(0deg) scale(0.2, 0.2)
+          opacity: 0
+        &:last-child
+          transform: rotate(-45deg) translate(0, -1px)
 </style>
+
+<script>
+  // Open and hide navigation menu
+  const menuBtnEl = document.querySelector(".navbar__menu-btn");
+  const navEl = document.querySelector(".navbar__navigation");
+  menuBtnEl.addEventListener("click", (e) => {
+    console.log("Clicked on hamburger!");
+
+    menuBtnEl.classList.toggle("navbar__menu-btn--open");
+    navEl.classList.toggle("navbar__navigation--open");
+  });
+</script>
