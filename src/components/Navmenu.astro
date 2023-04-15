@@ -1,0 +1,171 @@
+---
+const { currentPage } = Astro.props;
+---
+
+<nav class="navigation">
+  <ul class="navigation__list">
+    <li class="navigation__list-item">
+      <a
+        class={`navigation__link ${
+          currentPage === "index" ? "navigation__link--active" : ""
+        }`}
+        href="/">Trang chủ</a
+      >
+    </li>
+    <li class="navigation__list-item">
+      <a
+        class={`navigation__link ${
+          currentPage === "search" ? "navigation__link--active" : ""
+        }`}
+        href="/search">Tìm kiếm đất</a
+      >
+    </li>
+    <li class="navigation__list-item">
+      <a
+        class={`navigation__link ${
+          currentPage === "map" ? "navigation__link--active" : ""
+        }`}
+        href="/map">Xem trên bản đồ</a
+      >
+    </li>
+    <li class="navigation__list-item">
+      <a
+        class={`navigation__link ${
+          currentPage === "contacts" ? "navigation__link--active" : ""
+        }`}
+        href="/contacts">Liên hệ</a
+      >
+    </li>
+  </ul>
+  <div class="navigation__hamburger-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</nav>
+
+<style lang="sass">
+  /* Navigation menu for wide screens */
+  .navigation
+    margin-top: .1rem
+    &__list
+      display: flex
+      list-style-type: none
+    &__list-item
+    &__link
+      display: block
+      font-family: var(--font-family-display)
+      font-weight: 500
+      letter-spacing: -.01em
+      padding: .4rem .7rem
+      white-space: nowrap
+      /* Link gradient animation on hover */
+      background: linear-gradient(to right, var(--color-grey-dark-1) 0%, var(--color-grey-dark-1) 30%, var(--color-primary) 40%, var(--color-intermediate-2) 60%, var(--color-intermediate-2) 100%)
+      background-size: 300%
+      background-position: left
+      -webkit-background-clip: text
+      background-clip: text
+      -webkit-text-fill-color: transparent
+      text-fill-color: transparent
+      transition: background-position 0.4s ease // Transition on hover out
+      &:hover,
+      &--active
+        background-position: right
+        transition: background-position 1.1s ease-in-out // Transition on hover in
+    &__hamburger-btn
+      display: none
+
+    /* Navigation menu with hamburger button for small screens */
+  @media only screen and (max-width: 1000px)
+    .navigation
+      position: relative
+      order: 10 // Place last among other children within flexible container (default flex order = 0)
+      /* Navigation menu */
+      &__list
+        position: absolute
+        top: calc(var(--navbar-height) / 2) // Menu is under the navbar
+        margin-top: 1rem
+        margin-right: -1.7rem // Visually align cross button and menu items
+        right: -90vw // Hide menu behind the right window boundary
+        padding-right: 40vw
+        background: var(--color-white)
+        flex-direction: column
+        align-items: flex-end
+        border-radius: 0 0 0 var(--border-radius-medium)
+        box-shadow: 0px 2px 4px -6px rgba(0, 0, 0, 0.08)
+        transition: all 0.5s cubic-bezier(0.77,0.2,0.05,1.0)
+        // transform: translate(calc(var(--container-padding) + 6.3rem), 0)
+      &__link
+        padding: 1rem 2rem //
+
+      /* Navigation menu in open state*/
+      &__list--open
+        // background: yellow
+        right: -40vw // Show menu but still hide right boundary
+      /* Hamburger button - closed menu*/
+      &__hamburger-btn
+        display: block
+        margin-top: .7rem
+        margin-left: 2rem
+        transform: scale(1.2)
+        position: relative
+        user-select: none
+        cursor: pointer
+        transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0)
+        // background: pink
+        span
+          display: block
+          width: 3.2rem
+          height: .4rem
+          margin-bottom: .6rem
+          border-radius: var(--border-radius-medium)
+          background: var(--color-intermediate-4)
+          transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0), background 0.5s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0.55s ease
+          &:first-child
+            transform-origin: 0% 0% // Center point for transformations
+          &:nth-child(2)
+            transform-origin: .4rem 0rem
+          &:last-child
+            transform-origin: 0% 100%
+
+      /* Hamburger button - opened menu*/
+      &__hamburger-btn--open
+        transform: translate(.6rem, .2rem) //
+        span
+          background: var(--color-intermediate-3)
+          &:first-child
+            transform: rotate(45deg) translate(-2px, -1px)
+          &:nth-child(2)
+            transform: rotate(0deg) scale(0.2, 0.2)
+            opacity: 0
+          &:last-child
+            transform: rotate(-45deg) translate(0, -1px)
+</style>
+
+<script>
+  /* JS functionality to open and hide navigation menu */
+  const menuBtnEl = document.querySelector(".navigation__hamburger-btn");
+  const navEl = document.querySelector(".navigation__list");
+
+  let menuOpen = false; // Menu state (open/closed)
+
+  /* Open and close menu on hamburger button click */
+  menuBtnEl.addEventListener("click", (e) => {
+    menuBtnEl.classList.toggle("navigation__hamburger-btn--open");
+    navEl.classList.toggle("navigation__list--open");
+    menuOpen = !menuOpen;
+  });
+
+  /* Also close open menu on any page clicks */
+  document.addEventListener("click", (e) => {
+    if (
+      menuOpen &&
+      !(e.target as Element).closest(".navigation__hamburger-btn") &&
+      !(e.target as Element).closest(".navigation__list")
+    ) {
+      menuOpen = false;
+      menuBtnEl.classList.remove("navigation__hamburger-btn--open");
+      navEl.classList.remove("navigation__list--open");
+    }
+  });
+</script>
