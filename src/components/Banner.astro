@@ -2,6 +2,9 @@
   <div class="banner__welcome-text">
     Quý khách vui lòng liên hệ với chúng tôi qua mạng xã hội
   </div>
+  <div class="banner__welcome-text banner__welcome-text--small">
+    Liên hệ qua mạng xã hội nhe
+  </div>
   <a class="banner__icon" href="#">
     <svg>
       <use href="/icons.svg#facebook"></use>
@@ -38,12 +41,15 @@
       letter-spacing: -0.05em
       margin-right: 1rem
       margin-top: -0.1rem
+      &--small
+        display: none
     &__icon
       color: inherit
       fill: currentColor
       width: 2.4rem
       height: 2.4rem
       margin-right: 0.2rem
+      flex-shrink: 0
       svg
         width: 100%
         height: 100%
@@ -51,4 +57,9 @@
       &:hover
         svg
           fill-opacity: 1
+    @media only screen and (max-width: 600px)
+      &__welcome-text
+        display: none
+        &--small
+          display: block
 </style>

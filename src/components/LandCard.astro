@@ -31,7 +31,7 @@ const landImgURL = land.images[0];
 
 <style lang="sass">
   .land-card
-    height: 34vh
+    height: 32vh
     border-radius: var(--border-radius-medium)
     box-shadow: var(--shadow-medium)
     overflow: hidden
@@ -63,13 +63,31 @@ const landImgURL = land.images[0];
       top: -5rem
       right: calc(-100% + 1.5rem)
       opacity: 0
-      transition: right 0.5s cubic-bezier(0.39, 0.58, 0.57, 1) 0.4s // Transition: transform breaks in Chrome browser, so I animated absolute positioning property instead
-    &:hover
-      .land-card__photo
-        transform: scale(1.2)
+      transition: right 0.5s cubic-bezier(0.39, 0.58, 0.57, 1) 0.2s // Transition: transform breaks in Chrome browser, so I animated absolute positioning property instead
+    /*   Hover effects for desktop version */
+    @media (min-width: 900px)
+      &:hover
+        .land-card__photo
+          transform: scale(1.2)
+        .land-card__description
+          transform: translateY(-100%)
+        .land-card__parameters
+          right: 1.4rem
+          opacity: 1
+    /*   Show all hidden information for mobile version */
+    @media (max-width: 899px)
       .land-card__description
         transform: translateY(-100%)
       .land-card__parameters
         right: 1.4rem
         opacity: 1
+    /*   Adjust card size and spacing for smaller screens */
+    @media only screen and (max-width: 900px)
+      height: 38vh
+      &__description
+        padding: 1.2rem 2rem 2.2rem
+    @media only screen and (max-width: 560px)
+      height: 38vh
+      &__description
+        padding: 1.2rem 1.5rem 1.8rem
 </style>

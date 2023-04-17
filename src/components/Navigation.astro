@@ -8,13 +8,17 @@ const { currentPage } = Astro.props;
   <div class="main-container navbar__content">
     <div class="navbar__logo">
       <a href="/">
-        <img src="/logo_name.svg" />
+        <picture>
+          <source media="(max-width: 799px)" srcset="/favicon.svg" />
+          <source media="(min-width: 800px)" srcset="/logo_name.svg" />
+          <img src="/favicon.svg" />
+        </picture>
       </a>
     </div>
     <Navmenu currentPage={currentPage} />
     <button
       onclick="location.href='tel:+840901606982'"
-      class="nice-btn nice-btn--transparent nice-btn--call navbar__button"
+      class="nice-btn nice-btn--transparent nice-btn--call navbar__button navbar__button--call"
     >
       <svg class="nice-btn__icon-call">
         <use href="/icons.svg#phone"></use>
@@ -52,6 +56,13 @@ const { currentPage } = Astro.props;
       margin-top: 1rem
       &:hover
         filter: drop-shadow(0rem .4rem 1rem rgba(0, 0, 0, .1))
+      @media only screen and (max-width: 799px)
+        margin-left: 0rem
+        margin-top: .7rem
+        width: 4.4rem
+        height: 4rem
+      @media only screen and (max-width: 600px)
+        display: none
     &__button
       flex-shrink: 0
       margin-left: .5rem

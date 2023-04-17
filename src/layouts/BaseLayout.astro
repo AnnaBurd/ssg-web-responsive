@@ -27,8 +27,8 @@ const { pageTitle, currentPage } = Astro.props;
   </head>
   <body>
     <Banner />
-    <Navigation currentPage={currentPage} />
     <main>
+      <Navigation currentPage={currentPage} />
       <slot />
     </main>
     <Footer />

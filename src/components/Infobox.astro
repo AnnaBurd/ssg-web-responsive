@@ -56,4 +56,11 @@ const { icon, title, contact } = Astro.props;
       color: var(--color-intermediate-3)
     &:hover
       transform: scale(1.04) translate(0, -.4rem)
+
+  /* Center third (last) box for 2-column layout*/
+  @media only screen and (max-width: 920px) and (min-width: 564px)
+    .info-box:last-child
+      transform: translate(calc(50% + var(--grid-gap-medium)/2))
+      &:hover
+        transform: scale(1.04) translate(calc(50% + var(--grid-gap-medium)/2 - 2%), -.2rem)
 </style>

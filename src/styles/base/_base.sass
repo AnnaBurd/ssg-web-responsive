@@ -7,14 +7,22 @@ html
     font-size: 62.5% // Set base for rem lenght units (for standart browser font size settings 16px, 1rem = 16px*62.5% = 10px)
                      // So changing the font-size property automatically changes all rem-sized elements
     @media only screen and (max-width: 1100px) 
-        font-size: 56.25%
+        font-size: 61%
     @media only screen and (max-width:950px) 
-        font-size: 50%
+        font-size: 59.375%
+    @media only screen and (max-width:650px) 
+        font-size: 58%
+    @media only screen and (max-width:350px) 
+        font-size: 56.5%
 
 body
     line-height: 1.5 // Accessible line height
     -webkit-font-smoothing: antialiased // Improve font rendering (as of 2023 relevant mostly for MacOS users)
-    font-smoothing: antialiased  
+    font-smoothing: antialiased
+
+html, body // Full page view to use relative heights in mobile layout independently of mobile bar size, instead of vh units
+    height: 100%
+
 
 img, picture, video, canvas, svg // Simplify sizing of media assets
     display: block

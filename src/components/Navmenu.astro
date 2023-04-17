@@ -83,6 +83,7 @@ const { currentPage } = Astro.props;
       /* Navigation menu */
       &__list
         position: absolute
+        padding-top: 1rem
         top: calc(var(--navbar-height) / 2) // Menu is under the navbar
         margin-top: 1rem
         margin-right: -1.7rem // Visually align cross button and menu items
@@ -140,6 +141,21 @@ const { currentPage } = Astro.props;
             opacity: 0
           &:last-child
             transform: rotate(-45deg) translate(0, -1px)
+
+  @media only screen and (max-width: 600px)
+    .navigation
+      order: -1
+      margin-right: auto
+      &__list
+        right: 30vw
+        padding-right: 3rem
+        padding-left: 10rem // Hide menu behind the left window boundary
+        align-items: flex-start
+        border-radius: 0 0 var(--border-radius-medium) 0
+      &__list--open
+        right: -9.9rem
+      &__hamburger-btn
+        margin-left: 0.2rem
 </style>
 
 <script>
