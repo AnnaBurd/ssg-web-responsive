@@ -11,7 +11,7 @@ export default class ScrollView {
 
   /* Accept array of elements with specified scroll options [{section: element, align: top (default)/ center, dynamic: false (default) / true}] */
   constructor(snapElements) {
-    console.log("Scroll constructor recieved elements", snapElements);
+    // console.log("Scroll constructor recieved elements", snapElements);
 
     /* Calculate page offset to account for sticky header */
     this.#calcTopOffset();
@@ -35,7 +35,7 @@ export default class ScrollView {
       });
     });
 
-    console.log("Calculated snap points for elements: ", this.#elementsToSnap);
+    // console.log("Calculated snap points for elements: ", this.#elementsToSnap);
 
     /* Update initial state of scroller*/
     this.#calcCurrentElementInFocuse();
@@ -104,10 +104,10 @@ export default class ScrollView {
     )
       this.#currentElementInFocuse = footerNumber;
 
-    console.log(
-      "Initially focused on ",
-      this.#elementsToSnap[this.#currentElementInFocuse].element
-    );
+    // console.log(
+    //   "Initially focused on ",
+    //   this.#elementsToSnap[this.#currentElementInFocuse].element
+    // );
   }
 
   /*  Handle smooth scroll animations */
@@ -140,20 +140,20 @@ export default class ScrollView {
 
     // Scroll to next section
     this.#isRunningScrollAnimation = true;
-    console.log(
-      "Current section: ",
-      this.#elementsToSnap[this.#currentElementInFocuse]
-    );
+    // console.log(
+    //   "Current section: ",
+    //   this.#elementsToSnap[this.#currentElementInFocuse]
+    // );
     this.#currentElementInFocuse = this.#nextElementToFocuse;
     window.scroll({
       top: this.#elementsToSnap[this.#currentElementInFocuse].snapPoint,
       behavior: "smooth",
     });
 
-    console.log(
-      "Scroll to: ",
-      this.#elementsToSnap[this.#currentElementInFocuse]
-    );
+    // console.log(
+    //   "Scroll to: ",
+    //   this.#elementsToSnap[this.#currentElementInFocuse]
+    // );
 
     // Release block of scroll animation when scrolling is finished
     await this.#wait(

@@ -3,8 +3,8 @@ const { land } = Astro.props;
 const landImgURL = land.images[0];
 ---
 
-<a href={"/" + land.slug} data-scroll>
-  <div class="land-card">
+<a href={"/" + land.slug}>
+  <div class="land-card" data-scroll>
     <div class="land-card__photo">
       <img
         src={landImgURL || "/no_image.svg"}
@@ -91,6 +91,14 @@ const landImgURL = land.images[0];
       &__description
         padding: 1.2rem 1.5rem 1.8rem
 
-  // [data-scroll]
-  //   opacity: 0
+  /* Attributes for animations on scroll in, works together with intersection observer API */
+  [data-scroll]
+    opacity: 0
+    will-change: transform, scale, opacity
+    transform: translateY(50vh) scale(0.93)
+    transition: all 3.5s cubic-bezier(0.165, 0.84, 0.44, 1), transform 1.5s ease
+
+  [data-scroll="in"]
+    opacity: 1
+    transform: translateY(0) scale(1)
 </style>

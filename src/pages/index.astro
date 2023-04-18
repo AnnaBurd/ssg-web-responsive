@@ -31,7 +31,7 @@ const heroImgURL =
     <p class="hero__text nice-p1">Hanh phuc la cai gi nua.</p>
   </section>
   <section class="lands main-container">
-    <div class="lands__intro">
+    <div class="lands__intro" data-scroll>
       <h2 class="lands__heading nice-h2">Dự án hiện tại đang bán</h2>
       <p class="lands__text nice-p2">
         <a class="link-btn" href="/search"
@@ -54,7 +54,7 @@ const heroImgURL =
     </svg>
   </span>
   <section class="about-company main-container">
-    <div class="about-company__intro">
+    <div class="about-company__intro" data-scroll="out">
       <h2 class="about-company__heading nice-h2">
         Tại sao mua đất từ ​​chúng tôi
       </h2>
@@ -122,6 +122,8 @@ const heroImgURL =
       flex-direction: column
       justify-content: flex-end
       padding-bottom: 4vh
+      @media only screen and (min-width: 991px)
+        padding-bottom: 6vh
     &__text
       max-width: 23rem
 
@@ -135,6 +137,8 @@ const heroImgURL =
       text-align: center
       margin-top: -10rem
       margin-bottom: 6vh
+      @media only screen and (min-width: 991px)
+        margin-bottom: 9vh
     &__heading
       // TODO typography - figure out nice color scheme
       // background: linear-gradient(90deg, var(--color-secondary) -50%, var(--color-primary) 200%)
@@ -165,6 +169,18 @@ const heroImgURL =
       &__intro
       &__text
         width: 95%
+
+  /* Attributes for animations on scroll in, works together with intersection observer API */
+  [data-scroll]
+    transition: all .6s ease // TODO configure transitions
+    // background: red
+
+  [data-scroll="out"]
+    opacity: 0
+    // transform: translate(0, 4vh)
+
+  [data-scroll="in"]
+    transform: translate(0, 3vh)
 </style>
 
 <script>
@@ -218,34 +234,85 @@ const heroImgURL =
     let runningTextline = new RunningTextlineView(textLineEl, lines);
     runningTextline.startAnimation();
 
-    /* Animations functionality */
-
-    // scroller.setActive(true);
-
+    /* Animations functionality */ // TODO REFACTOR AND SET TRANSITION FUNCTIONS // TODO configure and refactor effects and transitions when sections come to focus
     let observerOptions = {
       root: null, // viewport
       rootMargin: "0px",
-      threshold: [0.1, 0.9], // when threshhold * 100% of the target is visible within the element specified by the root option, the callback is invoked
+      threshold: [0.1, 0.3, 0.9], // when threshhold * 100% of the target is visible within the element specified by the root option, the callback is invoked
     };
+
+    const landCards = document.querySelectorAll(".land-card");
+    const landsIntro = document.querySelector(".lands__intro");
+
+    const aboutCards = document.querySelectorAll(".info-box");
+    const aboutIntro = document.querySelector(".about-company__intro");
 
     let observerCallback = (entries, observer) => {
       entries.forEach((entry) => {
-        console.log(entry);
+        console.log(
+          "All entries: ",
+          entry.target.className,
+          "\t intersectionRatio = ",
+          entry.intersectionRatio,
+          " ",
+          entry
+        );
 
-        // TODO effects and transitions when sections come to focus
-        if (entry.intersectionRatio > 0.1) {
-          // entry.target.style.backgroundColor = "blue";
-          // entry.target.style.transition = "background 2.3s";
+        // Projects section is showing in first time
+        if (entry.intersectionRatio > 0.25 && entry.target === projectsViewEl) {
+          console.warn(
+            "Entries fit: ",
+            entry.target.className,
+            "\t intersectionRatio = ",
+            entry.intersectionRatio,
+            " ",
+            entry
+          );
+
+          landsIntro.setAttribute("data-scroll", "in");
+          landCards.forEach((card, index) => {
+            setTimeout(
+              function () {
+                console.log(card);
+                card.setAttribute("data-scroll", "in");
+              },
+              index < 3 ? index * 100 : (6 - index) * 100 + 300
+            );
+          });
+
+          observer.unobserve(entry.target);
+        }
+
+        // About section is showing in first time
+        if (entry.intersectionRatio > 0 && entry.target === aboutViewEl) {
+          console.warn(
+            "About fit: ",
+            entry.target.className,
+            "\t intersectionRatio = ",
+            entry.intersectionRatio,
+            " ",
+            entry
+          );
+
+          aboutIntro.setAttribute("data-scroll", "in");
+          aboutCards.forEach((card, index) => {
+            setTimeout(
+              function () {
+                console.log(card);
+                card.setAttribute("data-scroll", "in");
+              },
+              index < 3 ? index * 100 : (6 - index) * 100 + 300
+            );
+          });
+
+          observer.unobserve(entry.target);
         }
       });
     };
 
     let observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    observer.observe(heroViewEl);
     observer.observe(projectsViewEl);
-
-    // this.#dynamicScrollElements.forEach((el) => observer.observe(el));
+    observer.observe(aboutViewEl);
   }
 
   if (desktop) {
