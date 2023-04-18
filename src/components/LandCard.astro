@@ -3,7 +3,7 @@ const { land } = Astro.props;
 const landImgURL = land.images[0];
 ---
 
-<a href={"/" + land.slug}>
+<a href={"/" + land.slug} data-scroll>
   <div class="land-card">
     <div class="land-card__photo">
       <img
@@ -36,7 +36,7 @@ const landImgURL = land.images[0];
     box-shadow: var(--shadow-medium)
     overflow: hidden
     position: relative
-    will-change: transform opacity
+    will-change: transform, opacity
     &__photo
       width: 100%
       height: 90%
@@ -90,4 +90,7 @@ const landImgURL = land.images[0];
       height: 38vh
       &__description
         padding: 1.2rem 1.5rem 1.8rem
+
+  // [data-scroll]
+  //   opacity: 0
 </style>

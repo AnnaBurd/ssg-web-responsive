@@ -90,7 +90,7 @@ const heroImgURL =
 <style lang="sass">
   .hero
     height: 80vh // Fallback for older browsers
-    height: calc(80dvh - var(--banner-height) - var(--navbar-height))
+    height: calc(80svh - var(--banner-height) - var(--navbar-height))
     display: flex
     flex-direction: column
     align-items: center
@@ -169,8 +169,9 @@ const heroImgURL =
 
 <script>
   import RunningTextlineView from "../scripts/views/runningTextlineView";
+  import ScrollView from "../scripts/views/scrollView";
 
-  /* Chech width of client device to know whether it is a desktop or a mobile client */
+  /* Check width of client device to know whether it is a desktop or a mobile client */
   let clientWindowWidth =
     window.innerWidth ||
     document.documentElement.clientWidth ||
@@ -180,9 +181,31 @@ const heroImgURL =
   function init() {
     console.log("Main Page is here!");
 
-    // Scroll functionality // TODO
+    /* Scroll functionality  */
+    // Main sections that can come into view on index page
+    const heroViewEl = document.querySelector("section.hero");
+    const projectsViewEl = document.querySelector("section.lands");
+    const aboutViewEl = document.querySelector("section.about-company");
+    const footerViewEl = document.querySelector("footer");
 
-    // Running text line functionality
+    const scroller = new ScrollView([
+      { pageElement: heroViewEl },
+      { pageElement: projectsViewEl },
+      { pageElement: aboutViewEl },
+      { pageElement: footerViewEl },
+    ]);
+
+    document.addEventListener(
+      "wheel",
+      function (e) {
+        scroller.handleScroll(e);
+      },
+      {
+        passive: false,
+      }
+    );
+
+    /* Running text line functionality */
     const textLineEl = document.querySelector(".hero__text");
     const lines = [
       "Hanh phuc la cai gi nua.",
@@ -194,6 +217,35 @@ const heroImgURL =
     ];
     let runningTextline = new RunningTextlineView(textLineEl, lines);
     runningTextline.startAnimation();
+
+    /* Animations functionality */
+
+    // scroller.setActive(true);
+
+    let observerOptions = {
+      root: null, // viewport
+      rootMargin: "0px",
+      threshold: [0.1, 0.9], // when threshhold * 100% of the target is visible within the element specified by the root option, the callback is invoked
+    };
+
+    let observerCallback = (entries, observer) => {
+      entries.forEach((entry) => {
+        console.log(entry);
+
+        // TODO effects and transitions when sections come to focus
+        if (entry.intersectionRatio > 0.1) {
+          // entry.target.style.backgroundColor = "blue";
+          // entry.target.style.transition = "background 2.3s";
+        }
+      });
+    };
+
+    let observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    observer.observe(heroViewEl);
+    observer.observe(projectsViewEl);
+
+    // this.#dynamicScrollElements.forEach((el) => observer.observe(el));
   }
 
   if (desktop) {
