@@ -104,10 +104,10 @@ export default class ScrollView {
     )
       this.#currentElementInFocuse = footerNumber;
 
-    // console.log(
-    //   "Initially focused on ",
-    //   this.#elementsToSnap[this.#currentElementInFocuse].element
-    // );
+    console.log(
+      "Initially focused on ",
+      this.#elementsToSnap[this.#currentElementInFocuse].element
+    );
   }
 
   /*  Handle smooth scroll animations */
@@ -117,6 +117,12 @@ export default class ScrollView {
 
   /* Smooothly scroll page between snap points*/
   async handleScroll(e) {
+    console.warn(
+      `Scroll event while ${
+        this.#isRunningScrollAnimation ? "animating " : " not animating "
+      }`,
+      e
+    );
     if (!this.#isActive) return;
 
     // Prevent default behaviour on mouse wheel event
@@ -150,10 +156,10 @@ export default class ScrollView {
       behavior: "smooth",
     });
 
-    // console.log(
-    //   "Scroll to: ",
-    //   this.#elementsToSnap[this.#currentElementInFocuse]
-    // );
+    console.log(
+      "Scroll to: ",
+      this.#elementsToSnap[this.#currentElementInFocuse]
+    );
 
     // Release block of scroll animation when scrolling is finished
     await this.#wait(

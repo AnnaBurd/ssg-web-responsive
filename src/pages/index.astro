@@ -171,16 +171,13 @@ const heroImgURL =
         width: 95%
 
   /* Attributes for animations on scroll in, works together with intersection observer API */
-  [data-scroll]
-    transition: all .6s ease // TODO configure transitions
-    // background: red
-
-  [data-scroll="out"]
-    opacity: 0
-    // transform: translate(0, 4vh)
-
-  [data-scroll="in"]
-    transform: translate(0, 3vh)
+  @media only screen and (min-width: 991px)
+    [data-scroll]
+      transition: all .6s ease // TODO configure transitions
+    [data-scroll="out"]
+      opacity: 0
+    [data-scroll="in"]
+      transform: translate(0, 3vh)
 </style>
 
 <script>
@@ -249,31 +246,31 @@ const heroImgURL =
 
     let observerCallback = (entries, observer) => {
       entries.forEach((entry) => {
-        console.log(
-          "All entries: ",
-          entry.target.className,
-          "\t intersectionRatio = ",
-          entry.intersectionRatio,
-          " ",
-          entry
-        );
+        // console.log(
+        //   "All entries: ",
+        //   entry.target.className,
+        //   "\t intersectionRatio = ",
+        //   entry.intersectionRatio,
+        //   " ",
+        //   entry
+        // );
 
         // Projects section is showing in first time
         if (entry.intersectionRatio > 0.25 && entry.target === projectsViewEl) {
-          console.warn(
-            "Entries fit: ",
-            entry.target.className,
-            "\t intersectionRatio = ",
-            entry.intersectionRatio,
-            " ",
-            entry
-          );
+          // console.warn(
+          //   "Entries fit: ",
+          //   entry.target.className,
+          //   "\t intersectionRatio = ",
+          //   entry.intersectionRatio,
+          //   " ",
+          //   entry
+          // );
 
           landsIntro.setAttribute("data-scroll", "in");
           landCards.forEach((card, index) => {
             setTimeout(
               function () {
-                console.log(card);
+                // console.log(card);
                 card.setAttribute("data-scroll", "in");
               },
               index < 3 ? index * 100 : (6 - index) * 100 + 300
@@ -285,20 +282,20 @@ const heroImgURL =
 
         // About section is showing in first time
         if (entry.intersectionRatio > 0 && entry.target === aboutViewEl) {
-          console.warn(
-            "About fit: ",
-            entry.target.className,
-            "\t intersectionRatio = ",
-            entry.intersectionRatio,
-            " ",
-            entry
-          );
+          // console.warn(
+          //   "About fit: ",
+          //   entry.target.className,
+          //   "\t intersectionRatio = ",
+          //   entry.intersectionRatio,
+          //   " ",
+          //   entry
+          // );
 
           aboutIntro.setAttribute("data-scroll", "in");
           aboutCards.forEach((card, index) => {
             setTimeout(
               function () {
-                console.log(card);
+                // console.log(card);
                 card.setAttribute("data-scroll", "in");
               },
               index < 3 ? index * 100 : (6 - index) * 100 + 300

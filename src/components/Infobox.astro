@@ -65,13 +65,14 @@ const { icon, title, contact } = Astro.props;
         transform: scale(1.04) translate(calc(50% + var(--grid-gap-medium)/2 - 2%), -.2rem)
 
   /* Attributes for animations on scroll in, works together with intersection observer API */
-  [data-scroll]
-    opacity: 0
-    will-change: transform, scale, opacity
-    transform: translateY(50vh) scale(0.93)
-    transition: all 3.5s cubic-bezier(0.165, 0.84, 0.44, 1), transform 1.5s ease
+  @media only screen and (min-width: 991px)
+    [data-scroll]
+      opacity: 0
+      will-change: transform, scale, opacity
+      transform: translateY(50vh) scale(0.93)
+      transition: all 3.5s cubic-bezier(0.165, 0.84, 0.44, 1), transform 1.5s ease
 
-  [data-scroll="in"]
-    opacity: 1
-    transform: translateY(0) scale(1)
+    [data-scroll="in"]
+      opacity: 1
+      transform: translateY(0) scale(1)
 </style>
