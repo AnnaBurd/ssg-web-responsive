@@ -201,23 +201,6 @@ const heroImgURL =
     const aboutViewEl = document.querySelector("section.about-company");
     const footerViewEl = document.querySelector("footer");
 
-    const scroller = new ScrollView([
-      { pageElement: heroViewEl },
-      { pageElement: projectsViewEl },
-      { pageElement: aboutViewEl },
-      { pageElement: footerViewEl },
-    ]);
-
-    document.addEventListener(
-      "wheel",
-      function (e) {
-        scroller.handleScroll(e);
-      },
-      {
-        passive: false,
-      }
-    );
-
     /* Running text line functionality */
     const textLineEl = document.querySelector(".hero__text");
     const lines = [
