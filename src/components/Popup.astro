@@ -1,0 +1,138 @@
+---
+const { popupid } = Astro.props;
+---
+
+<pop-up class="popup" id={popupid}>
+  <div class="popup__content">
+    <div class="popup__close">
+      <svg class="popup__close-icon">
+        <use href="/icons.svg#close"></use>
+      </svg>
+    </div>
+    <slot />
+  </div>
+</pop-up>
+
+<style lang="sass">
+  .popup
+    /* Fix popup position on top of page */
+    width: 100%
+    height: 100%
+    position: fixed
+    top: 0
+    left: 0
+    z-index: 1000 //
+    background-color: rgba(#000, 0.6)
+    /* Center popup content */
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    /* Hide popup in default state */
+    visibility: hidden
+    opacity: 0
+    transition: opacity 2s ease, visibility 0s 2s // Transition on closing //TODO
+    &__content
+      box-shadow: var(--shadow-medium)
+      border-radius: var(--border-radius-medium)
+      overflow: hidden
+      position: relative
+      transform: scale(.5) // Reduced size in hidden state creates growing pop-up animation
+      transition: transform .2s ease .1s // TODO
+
+    /* Close button */
+    &__close
+      position: absolute
+      right: 0
+      top: 0
+      padding: .8rem
+      color: var(--color-grey-dark-1)
+    &__close-icon
+      width: 2rem
+      height: 2rem
+      fill: currentColor
+      cursor: pointer
+      opacity: .1
+      transition: opacity .2s
+      &:hover
+        opacity: 1
+
+  /* Popup in visible state */
+  .popup[open]
+    // z-index: 1000
+    visibility: inherit
+    opacity: 1
+    transition: opacity 2s ease, visibility 0s // Transition on opening
+    & .popup__content
+      transform: scale(1)
+      transition: transform .2s ease .1s // TODO set up transition timings
+</style>
+
+<script>
+  class PopUp extends HTMLElement {
+    #open;
+
+    constructor() {
+      super();
+      console.log("Hello from Popup element!", this);
+
+      // Close popup with close button (x)
+      this.querySelector(".popup__close-icon").addEventListener(
+        "click",
+        this.hide.bind(this)
+      );
+
+      // Also close popup when user clicks ouside the popup content
+      this.addEventListener(
+        "click",
+        function (event) {
+          console.log(this);
+          if (!this.#open) return;
+
+          if (!event.target.closest(".popup__content")) {
+            this.hide();
+          }
+        }.bind(this)
+      );
+
+      // Also close popup with esc key
+      document.addEventListener(
+        "keydown",
+        function (event) {
+          console.log(event);
+          if (this.#open && event.key === "Escape") this.hide();
+        }.bind(this)
+      );
+    }
+
+    get open() {
+      this.#open = this.hasAttribute("open");
+      return this.#open;
+    }
+
+    set open(value) {
+      if (value) {
+        this.setAttribute("open", "");
+        this.#open = true;
+      } else {
+        this.removeAttribute("open");
+        this.#open = false;
+      }
+    }
+
+    show() {
+      if (this.#open) return; // Popup is already open
+
+      this.open = true;
+    }
+
+    hide() {
+      if (!this.#open) return; // Popup is already closed
+
+      this.open = false;
+    }
+  }
+
+  // Tell the browser to use PopUp class for <pop-up> elements
+  customElements.define("pop-up", PopUp);
+</script>

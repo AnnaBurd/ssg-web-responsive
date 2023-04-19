@@ -4,6 +4,8 @@ import "../styles/main.sass";
 import Banner from "../components/Banner.astro";
 import Footer from "../components/Footer.astro";
 import Navigation from "../components/Navigation.astro";
+import Popup from "../components/Popup.astro";
+import CallbackForm from "../components/CallbackForm.astro";
 
 const { pageTitle, currentPage } = Astro.props;
 ---
@@ -33,4 +35,19 @@ const { pageTitle, currentPage } = Astro.props;
     </main>
     <Footer />
   </body>
+  <Popup popupid="popupForm" open="true">
+    <CallbackForm />
+  </Popup>
 </html>
+
+<script>
+  const popup = document.querySelector("#popupForm");
+
+  // Open popup window on button click
+  document
+    .querySelector("#popupFormOpenBtn")
+    .addEventListener("click", function (event) {
+      console.log("Clicked!");
+      popup.show();
+    });
+</script>

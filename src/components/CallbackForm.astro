@@ -1,0 +1,204 @@
+---
+---
+
+<div class="form-callback">
+  <div class="form-callback__left">
+    <div class="form-callback__intro">
+      <h2 class="form-callback__heading nice-h2">
+        Chúng tôi rất mong nhận được hồi âm từ bạn
+      </h2>
+      <div class="form-callback__description nice-p2">
+        Vui lòng để lại tin nhắn và chúng tôi sẽ gọi lại sớm
+      </div>
+    </div>
+    <form
+      class="form-callback__form"
+      data-netlify="true"
+      method="post"
+      id="callbackForm"
+      name="callbackForm"
+    >
+      <div class="form-callback__input nice-input">
+        <input
+          class="nice-input__input"
+          type="text"
+          placeholder="Tên của bạn"
+          id="cf-name-input"
+          name="name"
+        />
+        <label class="nice-input__hint" for="cf-name-input">Tên của bạn</label>
+      </div>
+      <div class="form-callback__input nice-input">
+        <input
+          class="nice-input__input"
+          type="tel"
+          placeholder="Số điện thoại"
+          id="cf-phone-input"
+          pattern="(\+?84|0[3|5|7|8|9])+([0-9]{8})"
+          required
+          name="phone"
+        />
+        <label class="nice-input__hint" for="cf-phone-input"
+          >Số điện thoại</label
+        >
+      </div>
+      <div class="form-callback__input nice-input">
+        <textarea
+          id="cf-message-input"
+          name="message"
+          maxlength="5000"
+          data-name="field"
+          placeholder="Thông tin"
+          required=""
+          class="nice-input__input"></textarea>
+        <label class="nice-input__hint" for="cf-message-input">Thông tin</label>
+      </div>
+      <button class="nice-btn nice-btn--primary">Nhập thông tin</button>
+      <div
+        class="form-callback__message form-callback__message--success hidden"
+      >
+        <h2 class="form-callback__heading nice-h2">
+          Cảm ơn bạn đã đăng ký, chúng tôi se goi cho ban som nhe
+        </h2>
+      </div>
+      <div
+        class="form-callback__message form-callback__message--failure hidden"
+      >
+        <h2 class="form-callback__heading nice-h2">
+          Could not submit data, try again later!
+        </h2>
+      </div>
+    </form>
+  </div>
+  <div class="form-callback__right">
+    <!-- TODO  -->
+    <img
+      srcset={`https://images.ctfassets.net/2lc6rsj68vep/4lqBYEGtMmFlWb7VU0blAp/8c503da9cdb77ce0cb5da5cb8ec242d7/form-callback.jpg?w=1600 1600w,
+                https://images.ctfassets.net/2lc6rsj68vep/4lqBYEGtMmFlWb7VU0blAp/8c503da9cdb77ce0cb5da5cb8ec242d7/form-callback.jpg?w=1024 1024w`}
+      sizes={`(min-width: 1200px) 1600px,
+      (min-width: 900px) 700px,
+      (min-width: 600px) 400px,
+                200px`}
+      src="https://images.ctfassets.net/2lc6rsj68vep/4lqBYEGtMmFlWb7VU0blAp/8c503da9cdb77ce0cb5da5cb8ec242d7/form-callback.jpg?w=600"
+      alt=""
+      class="form-callback__image"
+    />
+  </div>
+</div>
+
+<style lang="sass">
+  .form-callback
+    max-width: calc(min(116rem, 70vw))
+    display: grid
+    grid-template-columns: 1fr 1fr
+    background: var(--color-grey-light-2)
+    &__left
+      padding: 8% 10%
+    &__intro
+    //   padding-left: .3rem
+    &__heading
+      line-height: 1.3em
+      margin-bottom: 1rem
+      font-size: 2.5em
+    &__description
+      margin-bottom: .8rem
+    &__form
+      position: relative
+      input, textarea, button
+        box-shadow: var(--shadow-small)
+    &__input
+      margin-bottom: 2.1rem
+      input
+        width: 100%
+      textarea
+        width: 100%
+        height: 6em
+        padding-top: 1.2rem
+        resize: none
+    &__message
+      background-color: var(--color-grey-light-2)
+      width: 103%
+      height: 103%
+      position: absolute
+      top: -0.5rem
+      left: -0.5rem
+      padding: 0.5rem
+      cursor: pointer
+      display: flex
+      align-items: center
+      justify-content: center
+      & .form-callback__heading
+        // text-align: center
+      &--success .form-callback__heading
+        color: var(--color-success)
+      &--failure .form-callback__heading
+        color: var(--color-warning)
+    &__right
+    &__image
+      width: 100%
+      height: 100%
+      object-fit: cover
+</style>
+
+<script>
+  // TODO refactor
+  /* Form functionality -> Handle form sumbissions to Netlify*/
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+
+    const myForm = event.target;
+    const formData = new FormData(myForm);
+
+    // TODO optionally parce data and address messages using name?
+    const successMessageEl = myForm.querySelector(
+      `.form-callback__message--success`
+    );
+    const failureMessageEl = myForm.querySelector(
+      `.form-callback__message--failure`
+    );
+
+    // Submit data
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(formData).toString(),
+    })
+      // Check response status to make sure the submission was accepted by Netlify
+      // And show success/failure message
+      .then((response) => {
+        if (!response.ok) {
+          failureMessageEl.classList.remove(`hidden`);
+        } else {
+          successMessageEl.classList.remove(`hidden`);
+        }
+      })
+      // Got no response from netlify (server or network connection is down)
+      .catch((error) => {
+        failureMessageEl.classList.remove(`hidden`);
+      })
+      // In all cases add click listener to close form and clear form fields
+      .finally(() => {
+        myForm.addEventListener(
+          "click",
+          function (e) {
+            document.querySelector("#popupForm").hide();
+
+            // Clean input fields and hide messages after the popup animation has finished
+            setTimeout(() => {
+              myForm
+                .querySelectorAll(".nice-input__input")
+                .forEach((el) => (el.value = ""));
+
+              failureMessageEl.classList.add(`hidden`);
+              successMessageEl.classList.add(`hidden`);
+            }, 1000);
+          },
+          { once: true }
+        );
+      });
+  };
+
+  document
+    .querySelector(".form-callback__form")
+    .addEventListener("submit", handleFormSubmit);
+</script>
