@@ -39,6 +39,8 @@ const { popupid } = Astro.props;
       position: relative
       transform: scale(.5) // Reduced size in hidden state creates growing pop-up animation
       transition: transform .2s ease .1s // TODO
+      margin-left: var(--container-padding)
+      margin-right: var(--container-padding)
 
     /* Close button */
     &__close
@@ -47,6 +49,7 @@ const { popupid } = Astro.props;
       top: 0
       padding: .8rem
       color: var(--color-grey-dark-1)
+      z-index: 1005
     &__close-icon
       width: 2rem
       height: 2rem

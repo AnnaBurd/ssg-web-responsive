@@ -29,6 +29,7 @@
             bottom: 30%
             opacity: 0
             visibility: hidden
+
     &__hint
         position: absolute
         bottom: -1.8rem
@@ -41,3 +42,9 @@
         border-radius: 0 var(--border-radius-medium) var(--border-radius-medium) 0
         font-size: 1.2rem
 
+@media only screen and (max-width:1200px)
+    .nice-input__hint
+        bottom: -1.4rem
+    .nice-input
+        textarea ~ .nice-input__hint
+            bottom: -1rem

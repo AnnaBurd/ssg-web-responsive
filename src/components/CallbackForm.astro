@@ -94,16 +94,18 @@
     background: var(--color-grey-light-2)
     &__left
       padding: 8% 10%
+      position: relative
     &__intro
+      width: 90%
     //   padding-left: .3rem
     &__heading
-      line-height: 1.3em
+      // width: 30%
+      line-height: 1.2em
       margin-bottom: 1rem
       font-size: 2.5em
     &__description
-      margin-bottom: .8rem
+      margin-bottom: .4rem
     &__form
-      position: relative
       input, textarea, button
         box-shadow: var(--shadow-small)
     &__input
@@ -117,18 +119,22 @@
         resize: none
     &__message
       background-color: var(--color-grey-light-2)
-      width: 103%
-      height: 103%
+      width: 120%
+      height: 120%
       position: absolute
-      top: -0.5rem
-      left: -0.5rem
-      padding: 0.5rem
+      top: -10%
+      left: -10%
+      // top: -0.5rem
+      // left: -0.5rem
+      // padding: 0.5rem
       cursor: pointer
       display: flex
       align-items: center
       justify-content: center
       & .form-callback__heading
-        // text-align: center
+        text-align: center
+        width: 80%
+        font-size: 1.8rem
       &--success .form-callback__heading
         color: var(--color-success)
       &--failure .form-callback__heading
@@ -138,9 +144,52 @@
       width: 100%
       height: 100%
       object-fit: cover
+
+  @media only screen and (max-width:1200px)
+    .form-callback
+      &__left
+        padding: 5% 7%
+      &__heading
+        font-size: 2.2rem
+      &__input
+        margin-bottom: 1.5rem
+
+  @media only screen and (max-width:1000px)
+    .form-callback
+      grid-template-columns: 1fr
+      grid-template-rows: minmax(min-content, 50vh)
+      align-items: center
+      &__left
+        padding: 6% 6% 6% 14%
+        grid-column: 1/-1
+        grid-row: 1/2
+        z-index: 1000
+      &__input
+        width: 90%
+        input, textarea
+          background: var(--color-grey-light-2)
+      &__right
+        grid-column: 1/-1
+        grid-row: 1/2
+        height: 100%
+      &__image
+        opacity: .2
+        height: 100%
+        width: 100%
+  @media only screen and (max-width:600px)
+    .form-callback
+      max-width: inherit
+      &__left
+        padding: 5% 6%
+      &__input
+        width: 100%
+      &__heading
+        font-size: 2rem
 </style>
 
 <script>
+  /* Adjust form positioning for mobile devices with open keyboard*/
+
   // TODO refactor
   /* Form functionality -> Handle form sumbissions to Netlify*/
   const handleFormSubmit = (event) => {
@@ -177,6 +226,7 @@
         failureMessageEl.classList.remove(`hidden`);
       })
       // In all cases add click listener to close form and clear form fields
+      // TODO or do the same if popup is closed!!! and remove event listener
       .finally(() => {
         myForm.addEventListener(
           "click",
