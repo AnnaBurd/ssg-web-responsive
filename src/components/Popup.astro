@@ -21,26 +21,28 @@ const { popupid } = Astro.props;
     position: fixed
     top: 0
     left: 0
-    z-index: 1000 //
+    z-index: 999 // Below navbar
     background-color: rgba(#000, 0.6)
-    /* Center popup content */
+
+    /* Center content */
     display: flex
     flex-direction: column
     align-items: center
     justify-content: center
+
     /* Hide popup in default state */
     visibility: hidden
     opacity: 0
-    transition: opacity 2s ease, visibility 0s 2s // Transition on closing //TODO
+    transition: visibility 0s .8s, opacity .8s ease // Transition on closing
     &__content
+      margin-left: var(--container-padding)
+      margin-right: var(--container-padding)
       box-shadow: var(--shadow-medium)
       border-radius: var(--border-radius-medium)
       overflow: hidden
       position: relative
       transform: scale(.5) // Reduced size in hidden state creates growing pop-up animation
-      transition: transform .2s ease .1s // TODO
-      margin-left: var(--container-padding)
-      margin-right: var(--container-padding)
+      transition: transform 0.3s cubic-bezier(.22,.61,.36,1)
 
     /* Close button */
     &__close
@@ -62,13 +64,13 @@ const { popupid } = Astro.props;
 
   /* Popup in visible state */
   .popup[open]
-    // z-index: 1000
-    visibility: inherit
+    visibility: inherit // visible
     opacity: 1
-    transition: opacity 2s ease, visibility 0s // Transition on opening
+    z-index: 1001 // On top of navbar
+    transition: opacity 1.2s ease-out, visibility 0s // Transition on opening
     & .popup__content
       transform: scale(1)
-      transition: transform .2s ease .1s // TODO set up transition timings
+      transition: transform 0.3s cubic-bezier(.2,.41,.85,1.23) 0s
 </style>
 
 <script>
@@ -79,13 +81,14 @@ const { popupid } = Astro.props;
       super();
       console.log("Hello from Popup element!", this);
 
-      // Close popup with close button (x)
+      /* Set listeners to close pop-up element */
+      // 1. Close popup with close button (x)
       this.querySelector(".popup__close-icon").addEventListener(
         "click",
         this.hide.bind(this)
       );
 
-      // Also close popup when user clicks ouside the popup content
+      // 2. Also close popup when user clicks ouside the popup content
       this.addEventListener(
         "click",
         function (event) {
@@ -98,7 +101,7 @@ const { popupid } = Astro.props;
         }.bind(this)
       );
 
-      // Also close popup with esc key
+      // 3. Also close popup with esc key
       document.addEventListener(
         "keydown",
         function (event) {
@@ -124,18 +127,18 @@ const { popupid } = Astro.props;
     }
 
     show() {
-      if (this.#open) return; // Popup is already open
+      if (this.#open) return; // Popup is already visible
 
       this.open = true;
     }
 
     hide() {
-      if (!this.#open) return; // Popup is already closed
+      if (!this.#open) return; // Popup is already hidden
 
       this.open = false;
     }
   }
 
-  // Tell the browser to use PopUp class for <pop-up> elements
+  // Tell the browser to use PopUp class for <pop-up> elements (magic of reusable web components https://web.dev/custom-elements-v1/)
   customElements.define("pop-up", PopUp);
 </script>
