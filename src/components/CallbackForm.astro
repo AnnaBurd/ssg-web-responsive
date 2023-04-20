@@ -226,26 +226,48 @@
         failureMessageEl.classList.remove(`hidden`);
       })
       // In all cases add click listener to close form and clear form fields
-      // TODO or do the same if popup is closed!!! and remove event listener
+      // TODO refactor
       .finally(() => {
-        myForm.addEventListener(
-          "click",
-          function (e) {
-            document.querySelector("#popupForm").hide();
-
-            // Clean input fields and hide messages after the popup animation has finished
-            setTimeout(() => {
-              myForm
-                .querySelectorAll(".nice-input__input")
-                .forEach((el) => (el.value = ""));
-
-              failureMessageEl.classList.add(`hidden`);
-              successMessageEl.classList.add(`hidden`);
-            }, 1000);
-          },
-          { once: true }
-        );
+        document.addEventListener("click", closeClearUp);
       });
+  };
+
+  const closeClearUp = function (e) {
+    let clickedOnForm = e.target.closest(".form-callback");
+    let clickedOnCloseBtn = e.target.closest(".popup__close");
+    let clickedOutsideForm = !e.target.closest(".popup__content");
+    console.log(
+      "clickedOnFormMessage = ",
+      clickedOnForm,
+      ` clickedOnCloseBtn = `,
+      clickedOnCloseBtn,
+      " clickedOutsideForm = ",
+      clickedOutsideForm
+    );
+
+    if (clickedOnForm || clickedOnCloseBtn || clickedOutsideForm) {
+      document.removeEventListener("click", closeClearUp);
+      document.querySelector("#popupForm").hide();
+
+      // Clean input fields and hide messages after the popup animation has finished
+      setTimeout(() => {
+        document
+          .querySelector("#popupForm")
+          .querySelectorAll(".nice-input__input")
+          .forEach((el) => (el.value = ""));
+
+        // TODO optionally parce data and address messages using name?
+        const successMessageEl = document.querySelector(
+          `.form-callback__message--success`
+        );
+        const failureMessageEl = document.querySelector(
+          `.form-callback__message--failure`
+        );
+
+        failureMessageEl.classList.add(`hidden`);
+        successMessageEl.classList.add(`hidden`);
+      }, 1000);
+    }
   };
 
   document
