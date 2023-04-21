@@ -49,6 +49,114 @@ class ClientModel extends Model {
     this.dataLoaded = true;
   }
 
+  /* Get land address using API and reverse geocoding */
+  async loadAllLandsGeodata() {
+    // Do not forget to set up API keys in Netlify environment
+    const geoapifyAPIKey = import.meta.env.GEOAPIFY_KEY;
+    const url = `https://api.geoapify.com/v1/batch?apiKey=${geoapifyAPIKey}`;
+
+    // Form API Request Body as in the documentation https://www.geoapify.com/solutions/batch-geocoding-requests
+    const requestInputs = this.lands
+      .filter((land) => land.coords[0]) // Use only lands with specified coordinates
+      .map((land) => {
+        return {
+          id: land.slug,
+          params: { lat: land.coords[0], lon: land.coords[1] },
+        };
+      });
+
+    let requestData = {
+      api: "/v1/geocode/reverse",
+      params: {
+        lang: "vi",
+      },
+      inputs: requestInputs,
+    };
+
+    // Batch fetch requests (asyncronous fetching) to get address for each of the [lat, long] land coordinates inputs
+    // Reference https://apidocs.geoapify.com/samples/batch/batch-call-javascript/
+
+    function getBodyAndStatus(response) {
+      return response.json().then((responceBody) => {
+        return {
+          status: response.status,
+          body: responceBody,
+        };
+      });
+    }
+
+    function getAsyncResult(url, timeout, maxAttempt) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          repeatUntilSuccess(resolve, reject, 0);
+        }, timeout);
+      });
+
+      function repeatUntilSuccess(resolve, reject, attempt) {
+        console.log("Geoapify georeverce api attempt: " + attempt);
+        fetch(url)
+          .then(getBodyAndStatus)
+          .then((result) => {
+            if (result.status === 200) {
+              resolve(result.body);
+            } else if (attempt >= maxAttempt) {
+              reject("Max amount of attempt achived");
+            } else if (result.status === 202) {
+              // Check again after timeout
+              setTimeout(() => {
+                repeatUntilSuccess(resolve, reject, attempt + 1);
+              }, timeout);
+            } else {
+              // Something went wrong
+              reject(result.body);
+            }
+          })
+          .catch((err) => reject(err));
+      }
+    }
+
+    let addresses = await fetch(url, {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then(getBodyAndStatus)
+      .then((result) => {
+        if (result.status !== 202) {
+          return Promise.reject(result);
+        } else {
+          return getAsyncResult(`${url}&id=${result.body.id}`, 1000, 100).then(
+            (queryResult) => {
+              // console.log(queryResult);
+              return queryResult;
+            }
+          );
+        }
+      })
+      .catch((err) => console.log(err));
+
+    // After all addresses are fetched, add them into the existing lands data
+    addresses?.results.forEach((addr) => {
+      // Find land the address was fetched for
+      let land = this.lands.find((land) => land.slug === addr.id);
+
+      // And pass to it address value
+      land.address = addr.result.features[0].properties.formatted.replace(
+        ", Việt Nam",
+        ""
+      );
+    });
+  }
+
+  async getAllLandsDataWithAddresses() {
+    await this.loadAllLandsData();
+    await this.loadAllLandsGeodata();
+    return this.lands;
+  }
+
   // Parse entry fetched from CMS to a land object
   #entryItemToLand(item) {
     const longDescriptionOfLand = item.fields.longDescription?.content.flatMap(
@@ -75,7 +183,6 @@ class ClientModel extends Model {
       promoted: item.fields.promoted,
       briefDescription: item.fields.briefDescription,
       longDescription: longDescriptionOfLand,
-      address: "todo", //TODO
       coords: [item.fields.location?.lat, item.fields.location?.lon],
       coordsPolygon: [], // TODO?
       area: item.fields.area,

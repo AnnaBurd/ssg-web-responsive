@@ -21,3 +21,6 @@ pnpm-debug.log*
 
 # IDE settings
 .vscode
+
+#API tests playground
+src/pages/API.astro
