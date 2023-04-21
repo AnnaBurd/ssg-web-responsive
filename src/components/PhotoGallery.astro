@@ -1,0 +1,51 @@
+---
+const { land } = Astro.props;
+---
+
+<!-- TODO: image sizes -->
+<div class="photo-gallery">
+  <div class="photo-gallery__photo photo-gallery__photo--0">
+    <img src={land.images[0] || "/no_image.svg"} alt={land.title} />
+  </div>
+  <div class="photo-gallery__small-wrapper">
+    <div class="photo-gallery__photo photo-gallery__photo--1">
+      <img src={land.images[1] || "/no_image.svg"} alt={land.title} />
+    </div>
+    <div class="photo-gallery__photo photo-gallery__photo--2">
+      <img src={land.images[2] || "/no_image.svg"} alt={land.title} />
+    </div>
+    <div class="photo-gallery__photo photo-gallery__photo--3">
+      <img src={land.images[3] || "/no_image.svg"} alt={land.title} />
+    </div>
+    <div class="photo-gallery__photo photo-gallery__photo--4">
+      <img src={land.images[4] || "/no_image.svg"} alt={land.title} />
+    </div>
+  </div>
+</div>
+
+<style lang="sass">
+  .photo-gallery
+    width: 100%
+    height: 100%
+    display: grid
+    grid-template-columns: repeat(2, 1fr)
+    grid-template-rows: 100%
+    grid-gap: var(--grid-gap-small)
+    &__photo
+      border-radius: var(--border-radius-medium)
+      box-shadow: var(--shadow-medium)
+      overflow: hidden
+      cursor: pointer
+      img
+        width: 100%
+        height: 100%
+        object-fit: cover
+    &__photo--0
+    &__small-wrapper
+      display: grid
+      width: 100%
+      height: 100%
+      grid-template-columns: 1fr 1fr
+      grid-template-rows: 1fr 1fr
+      grid-gap: calc(var(--grid-gap-small) * 0.7)
+</style>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PhotoGallery from "../components/PhotoGallery.astro";
 import LandPropertiesList from "../components/LandPropertiesList.astro";
 
 import model from "../scripts/contentfulModel";
@@ -29,8 +30,7 @@ const { land, suggestedLands } = Astro.props;
   <section class="land main-container">
     <div class="land__breadcrumbs">todo breadcrumps {land.title}</div>
     <div class="land__info">
-      <div class="land__map">map</div>
-      <div class="land__photos">photos</div>
+      <div class="land__photos"><PhotoGallery land={land} /></div>
       <div class="land__description">
         <h3 class="land-desc__heading nice-h3">
           {land.title}
@@ -56,8 +56,10 @@ const { land, suggestedLands } = Astro.props;
         <h4 class="sidebar__heading nice-h4">Đặc điểm bất động sản:</h4>
         <LandPropertiesList land={land} />
       </div>
+      <div class="land__map">map</div>
     </div>
   </section>
+  <div class="temp">ttt</div>
   <!-- {suggestedLands.length > 0 && <Suggestions lands={suggestedLands} />} -->
 </BaseLayout>
 
@@ -68,21 +70,28 @@ const { land, suggestedLands } = Astro.props;
     &__info
       display: grid
       grid-template-columns: repeat(12, 1fr)
-      grid-template-rows: 300px 1fr //
-      grid-gap: 1.5rem //
+      grid-template-rows: minmax(46vh, 20rem) max-content 200px//
+      grid-gap: var(--grid-gap-small) //
+
+    /* Land info boxes */
     &__info > *
       border-radius: var(--border-radius-medium)
       box-shadow: var(--shadow-medium)
-    //   overflow: hidden //
+      overflow: hidden
+
+    /* Land location */
     &__map
       background: orange
-      grid-row: 1/2
-      grid-column: 1/7
+      grid-row: 3/4
+      grid-column: 1/10
 
+    /* Photo-gallery land */
     &__photos
-      background: green
       grid-row: 1/2
-      grid-column: 7/13
+      grid-column: 1/13
+      /* Reveal box-shadows applied to photos*/
+      box-shadow: none
+      overflow: visible
 
     /* Long description of land */
     &__description
@@ -107,8 +116,15 @@ const { land, suggestedLands } = Astro.props;
       height: max-content
       justify-self: end
       color: var(--color-intermediate-1)
+      // Sidebar is visible when scrolling through description/map subsections
+      position: sticky
+      top: calc(var(--navbar-height) + 1rem) // TODO config
       .sidebar__heading
         font-size: 1.4rem
         margin-bottom: 1.1rem
         color: inherit
+
+  .temp
+    height: 100vh
+    background: pink
 </style>
