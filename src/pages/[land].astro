@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LandPropertiesList from "../components/LandPropertiesList.astro";
+
+import model from "../scripts/contentfulModel";
+
+/* Generate static pages for all land items */
+export async function getStaticPaths() {
+  // Load land data
+  const allLandsData = await model.getAllLandsDataWithAddresses();
+
+  // Transform data and pass to Astro pages generator
+  return allLandsData.map((land) => {
+    return {
+      params: { land: land.slug },
+      props: {
+        land,
+        suggestedLands: model.getSuggestedLandsData(land),
+      },
+    };
+  });
+}
+
+// Finally pass access to land data to use as variable in HTML component
+const { land, suggestedLands } = Astro.props;
+---
+
+<BaseLayout pageTitle={land.title}>
+  <section class="land main-container">
+    <div class="land__breadcrumbs">todo breadcrumps {land.title}</div>
+    <div class="land__info">
+      <div class="land__map">map</div>
+      <div class="land__photos">photos</div>
+      <div class="land__description">
+        <h3 class="land-desc__heading nice-h3">
+          {land.title}
+        </h3>
+        {
+          land.longDescription?.map((desc) => {
+            if (desc.paragraph)
+              return <p class="land-desc__p nice-p3">{desc.paragraph}</p>;
+
+            if (desc.bulletPoints)
+              return (
+                <ul class="land-desc__list nice-p3">
+                  {desc.bulletPoints?.map((bp) => (
+                    <li>{bp}</li>
+                  ))}
+                </ul>
+              );
+            return "";
+          })
+        }
+      </div>
+      <div class="land__sidebar">
+        <h4 class="sidebar__heading nice-h4">Đặc điểm bất động sản:</h4>
+        <LandPropertiesList land={land} />
+      </div>
+    </div>
+  </section>
+  <!-- {suggestedLands.length > 0 && <Suggestions lands={suggestedLands} />} -->
+</BaseLayout>
+
+<style lang="sass">
+  .land
+    // background: pink
+    &__breadcrumbs
+    &__info
+      display: grid
+      grid-template-columns: repeat(12, 1fr)
+      grid-template-rows: 300px 1fr //
+      grid-gap: 1.5rem //
+    &__info > *
+      border-radius: var(--border-radius-medium)
+      box-shadow: var(--shadow-medium)
+    //   overflow: hidden //
+    &__map
+      background: orange
+      grid-row: 1/2
+      grid-column: 1/7
+
+    &__photos
+      background: green
+      grid-row: 1/2
+      grid-column: 7/13
+
+    /* Long description of land */
+    &__description
+      grid-column: 1/10
+      background: var(--color-grey-light-2)
+      padding: 2rem 5rem//
+      .land-desc
+        &__heading
+          margin-bottom: 1rem
+        &__p
+          margin-bottom: .7rem
+        &__list
+          margin-bottom: .7rem
+          padding-left: 2.4rem
+
+    /* Sidebar with land parameters table */
+    &__sidebar
+      grid-column: 10/13
+      background: var(--color-grey-light-2)
+      padding: 2.6rem 2.8rem 2.7rem 3.2rem //
+      width: max-content
+      height: max-content
+      justify-self: end
+      color: var(--color-intermediate-1)
+      .sidebar__heading
+        font-size: 1.4rem
+        margin-bottom: 1.1rem
+        color: inherit
+</style>
