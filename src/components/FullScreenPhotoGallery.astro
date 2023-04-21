@@ -1,0 +1,199 @@
+---
+import "@splidejs/splide/dist/css/splide.min.css";
+
+const { land } = Astro.props;
+---
+
+<div class="fullscreen-gallery">
+  <div
+    class="fullscreen-gallery__main splide main-splide"
+    aria-label={`Photos of ${land.title} land`}
+  >
+    <div class="splide__track">
+      <ul class="splide__list">
+        {
+          land.images?.map((imgURL) => (
+            <li class="splide__slide">
+              <div class="fullscreen-gallery__img-wrapper">
+                <img data-splide-lazy={imgURL} />
+              </div>
+            </li>
+          ))
+        }
+        {
+          land.videos?.map((vidURL) => (
+            <li class="splide__slide">
+              <video width="100%" height="100%" preload="none" muted controls>
+                <source src={vidURL} type="video/mp4" />
+                Sorry, your browser doesn't support embedded videos.
+              </video>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <div
+    class="fullscreen-gallery__thumbnail splide thumbnail-splide"
+    aria-label="Thumbnails for image gallery"
+  >
+    <div class="splide__track">
+      <ul class="splide__list">
+        {
+          land.images?.map((imgURL) => (
+            <li class="splide__slide">
+              <div class="fullscreen-gallery__thumbnail-wrapper">
+                <img src={imgURL} />
+              </div>
+            </li>
+          ))
+        }
+        {
+          land.videos?.map((vidURL) => (
+            <li class="splide__slide">
+              <img src={vidURL} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style lang="sass">
+  .fullscreen-gallery
+    // background: pink
+    width: 85vw //
+    height: 80vh //
+    padding-left: 4rem // Space for navigation arrows
+    padding-right: 4rem
+    display: flex
+    flex-direction: column
+    /* Style slider */
+    &__main
+      height: 60%
+      width: 100%
+      flex: 1 1 1fr
+      border-radius: var(--border-radius-medium)
+    /* Center image within slide and set rounded corners */
+    &__img-wrapper
+      height: 100%
+      width: 100%
+      display: flex
+      justify-content: center
+      align-items: center
+      img
+        max-width: 100%
+        max-height: 100%
+        border-radius: var(--border-radius-medium)
+
+    /* Style thumbnails */
+    &__thumbnail
+      margin-top: 1.6rem
+      height: 8rem
+      width: 100%
+    &__thumbnail-wrapper
+      height: 100%
+      width: 100%
+      background: black
+      border-radius: calc(var(--border-radius-medium) *0.7)
+      overflow: hidden
+      img
+        width: 100%
+        height: 100%
+        object-fit: cover
+        opacity: 0.8
+        // border-radius: calc(var(--border-radius-medium) *0.7)
+      // background: pink
+</style>
+
+<script>
+  import Splide from "@splidejs/splide";
+
+  /* Configure properties of main and thumbnail splides 
+  Full reference of options: https://splidejs.com/guides/options/ */
+  const mainSplideOptions = {
+    type: "slide",
+    arrowPath:
+      "M25.0132 20.0001L9.84961 35.0808C8.71683 36.2062 8.71683 38.0308 9.84961 39.156C10.9822 40.2813 12.8189 40.2813 13.9518 39.156L31.0186 22.1824C31.6223 21.5828 31.8939 20.7852 31.8542 20.0001C31.8939 19.2149 31.6223 18.4173 31.0186 17.8176L13.9518 0.844067C12.8189 -0.281354 10.9825 -0.281354 9.84961 0.844067C8.71676 1.96949 8.71683 3.79398 9.84961 4.91911L25.0132 20.0001Z", // Arrow ">" path from the svg file, svg must be 40x40 // TODO
+    rewind: false, // No jump from end to start
+    speed: 800, // The transition time in milliseconds
+    perPage: 1, // Images per slide
+    perMove: 1,
+    updateOnMove: true, // Update the is-active status class just before moving the carousel
+    autoplay: false,
+    arrows: true,
+    pagination: false,
+    useIndex: true,
+    drag: true,
+    keyboard: true,
+    lazyLoad: "nearby",
+  };
+
+  const thumbnailSplideOptions = {
+    direction: "ltr", // Direction of sliding from top-to-bottom
+    width: "100%", // Slider line takes full width of its container (shrinks adaptively for device size)
+    height: "100%", // Slider line takes full height of its container (shrinks adaptively for device size)
+    perPage: 8, // Number of the thumbnail images // TODO dynamic!
+    rewind: false,
+    pagination: false,
+    useIndex: true,
+    focus: "center", // TODO
+    isNavigation: true, // Makes thumbnails clickable
+    arrows: false,
+    updateOnMove: true, //Updates the is-active status class just before moving the carousel for nicer transition
+  };
+
+  // TODO dynamic! per page:
+  //   // A carousel for desktop:
+  // {
+  //   breakpoints: {
+  // 		640: {
+  // 			destroy: true,
+  // 		},
+  //   }
+  // }
+
+  // // A carousel for mobile:
+  // {
+  //   mediaQuery: 'min',
+  //   breakpoints: {
+  // 		640: {
+  // 			destroy: true,
+  // 		},
+  //   }
+  // }
+
+  /* Get links to already generated HTML markup for sliders */
+  let mainSplideEl = document.querySelector(
+    ".fullscreen-gallery__main"
+  ) as HTMLElement;
+  let thumbnailSplideEl = document.querySelector(
+    ".fullscreen-gallery__thumbnail"
+  ) as HTMLElement;
+
+  /* Initialize sliders, ref: https://splidejs.com/guides/getting-started/ */
+  const initSliders = function (
+    mainSplideEl,
+    mainSplideOptions,
+    thumbnailSplideEl,
+    thumbnailSplideOptions
+  ) {
+    let mainSplide = new Splide(mainSplideEl, mainSplideOptions);
+    let thumbnailSplide = new Splide(thumbnailSplideEl, thumbnailSplideOptions);
+
+    /* Mount and syncronize main with thumbnails */
+    mainSplide.sync(thumbnailSplide);
+    mainSplide.mount();
+    thumbnailSplide.mount();
+
+    return [mainSplide, thumbnailSplide];
+  };
+
+  initSliders(
+    mainSplideEl,
+    mainSplideOptions,
+    thumbnailSplideEl,
+    thumbnailSplideOptions
+  );
+</script>

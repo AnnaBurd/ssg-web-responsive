@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@splidejs/splide": "^4.1.4",
     "astro": "^2.2.0",
     "contentful": "^9.3.5",
     "sass": "^1.61.0"

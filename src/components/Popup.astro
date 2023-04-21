@@ -21,7 +21,6 @@ const { popupid } = Astro.props;
     position: fixed
     top: 0
     left: 0
-    z-index: 999 // Below navbar
     background-color: rgba(#000, 0.6)
 
     /* Center content */
@@ -31,8 +30,11 @@ const { popupid } = Astro.props;
     justify-content: center
 
     /* Hide popup in default state */
-    visibility: hidden
-    opacity: 0
+    // TODO UNCOMMENT TEMP DEV
+    z-index: 1200
+    // visibility: hidden
+    // opacity: 0
+    // z-index: 999 // Below navbar
     transition: visibility 0s .8s, opacity .8s ease // Transition on closing
     &__content
       margin-left: var(--container-padding)
@@ -41,7 +43,7 @@ const { popupid } = Astro.props;
       border-radius: var(--border-radius-medium)
       overflow: hidden
       position: relative
-      transform: scale(.5) // Reduced size in hidden state creates growing pop-up animation
+      // transform: scale(.5) // Reduced size in hidden state creates growing pop-up animation // TODO UNCOMMENT TEMP DEV
       transition: transform 0.3s cubic-bezier(.22,.61,.36,1)
 
     /* Close button */
@@ -71,6 +73,20 @@ const { popupid } = Astro.props;
     & .popup__content
       transform: scale(1)
       transition: transform 0.3s cubic-bezier(.2,.41,.85,1.23) 0s
+
+  /* Style popup content for image gallery */
+  #popupGallery
+    .popup__content
+      position: unset
+      box-shadow: none
+    .popup__close
+      right: 2rem
+      top: 1rem
+    .popup__close-icon
+      color: var(--color-grey-light-1)
+      opacity: .5
+      &:hover
+        opacity: 1
 </style>
 
 <script>
@@ -120,6 +136,8 @@ const { popupid } = Astro.props;
       if (value) {
         this.setAttribute("open", "");
         this.#open = true;
+
+        // TODO should open popup prevent scroll of the page?
       } else {
         this.removeAttribute("open");
         this.#open = false;
