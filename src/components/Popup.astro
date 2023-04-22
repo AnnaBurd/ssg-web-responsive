@@ -30,12 +30,10 @@ const { popupid } = Astro.props;
     justify-content: center
 
     /* Hide popup in default state */
-    // TODO UNCOMMENT TEMP DEV
-    z-index: 1200
-    // visibility: hidden
-    // opacity: 0
-    // z-index: 999 // Below navbar
-    transition: visibility 0s .8s, opacity .8s ease // Transition on closing
+    visibility: hidden
+    opacity: 0
+    z-index: -1 // Below page content
+    transition: visibility 0s .8s, opacity .8s ease, z-index 0s 0.4s// Transition on closing
     &__content
       margin-left: var(--container-padding)
       margin-right: var(--container-padding)
@@ -43,7 +41,7 @@ const { popupid } = Astro.props;
       border-radius: var(--border-radius-medium)
       overflow: hidden
       position: relative
-      // transform: scale(.5) // Reduced size in hidden state creates growing pop-up animation // TODO UNCOMMENT TEMP DEV
+      transform: scale(.5) // Reduced size in hidden state creates growing pop-up animation
       transition: transform 0.3s cubic-bezier(.22,.61,.36,1)
 
     /* Close button */
@@ -68,8 +66,8 @@ const { popupid } = Astro.props;
   .popup[open]
     visibility: inherit // visible
     opacity: 1
-    z-index: 1001 // On top of navbar
-    transition: opacity 1.2s ease-out, visibility 0s // Transition on opening
+    z-index: 11 // On top of navbar
+    transition: opacity 1.2s ease-out, visibility 0s, z-index 0s // Transition on opening
     & .popup__content
       transform: scale(1)
       transition: transform 0.3s cubic-bezier(.2,.41,.85,1.23) 0s
@@ -108,7 +106,6 @@ const { popupid } = Astro.props;
       this.addEventListener(
         "click",
         function (event) {
-          console.log(this);
           if (!this.#open) return;
 
           if (!event.target.closest(".popup__content")) {
@@ -121,7 +118,6 @@ const { popupid } = Astro.props;
       document.addEventListener(
         "keydown",
         function (event) {
-          console.log(event);
           if (this.#open && event.key === "Escape") this.hide();
         }.bind(this)
       );
