@@ -153,7 +153,7 @@ class ClientModel extends Model {
 
   async getAllLandsDataWithAddresses() {
     await this.loadAllLandsData();
-    await this.loadAllLandsGeodata();
+    // await this.loadAllLandsGeodata(); // TODO temp - removed for faster development
     return this.lands;
   }
 

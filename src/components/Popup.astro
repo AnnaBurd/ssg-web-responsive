@@ -33,7 +33,7 @@ const { popupid } = Astro.props;
     visibility: hidden
     opacity: 0
     z-index: -1 // Below page content
-    transition: visibility 0s .8s, opacity .8s ease, z-index 0s 0.4s// Transition on closing
+    transition: visibility 0s .8s, opacity .8s ease, z-index 0s 0.6s // Transition on closing
     &__content
       margin-left: var(--container-padding)
       margin-right: var(--container-padding)
@@ -76,10 +76,12 @@ const { popupid } = Astro.props;
   #popupGallery
     .popup__content
       position: unset
+      overflow: visible
       box-shadow: none
+      transform: scale(1)
     .popup__close
-      right: 2rem
-      top: 1rem
+      right: -2rem
+      top: -3rem
     .popup__close-icon
       color: var(--color-grey-light-1)
       opacity: .5

@@ -8,20 +8,20 @@ const { land } = Astro.props;
 <!-- TODO: image sizes -->
 <div class="photo-gallery">
   <div class="photo-gallery__wrapper">
-    <div class="photo-gallery__photo photo-gallery__photo--0">
+    <div class="photo-gallery__photo" data-num="0">
       <img src={land.images[0] || "/no_image.svg"} alt={land.title} />
     </div>
     <div class="photo-gallery__small-wrapper">
-      <div class="photo-gallery__photo photo-gallery__photo--1">
+      <div class="photo-gallery__photo" data-num="1">
         <img src={land.images[1] || "/no_image.svg"} alt={land.title} />
       </div>
-      <div class="photo-gallery__photo photo-gallery__photo--2">
+      <div class="photo-gallery__photo" data-num="2">
         <img src={land.images[2] || "/no_image.svg"} alt={land.title} />
       </div>
-      <div class="photo-gallery__photo photo-gallery__photo--3">
+      <div class="photo-gallery__photo" data-num="3">
         <img src={land.images[3] || "/no_image.svg"} alt={land.title} />
       </div>
-      <div class="photo-gallery__photo photo-gallery__photo--4">
+      <div class="photo-gallery__photo" data-num="4">
         <img src={land.images[4] || "/no_image.svg"} alt={land.title} />
       </div>
     </div>
@@ -59,6 +59,31 @@ const { land } = Astro.props;
       grid-template-columns: 1fr 1fr
       grid-template-rows: 1fr 1fr
       grid-gap: calc(var(--grid-gap-small) * 0.7)
-
-    /* Fullscreen gallery */
 </style>
+
+<script lang="js">
+  // Gallery components
+  let galleryEl = document.querySelector(".photo-gallery");
+  let galleryFullscreenEl = document.querySelector(".fullscreen-gallery");
+  let popupEl = document.getElementById("popupGallery");
+
+  // Listen for clicks on small gallery and open full screen gallery as needed
+  document
+    .querySelector(".photo-gallery")
+    .addEventListener("click", (event) => {
+      console.log("Clicked on photo gallery", event);
+
+      let targetImg = event.target.closest(".photo-gallery__photo");
+      console.log("Target: ", targetImg);
+
+      if (!targetImg) return;
+
+      let targetPhotoNum = Number(targetImg.dataset.num);
+
+      galleryFullscreenEl.open(targetPhotoNum);
+
+      popupEl.show();
+
+      // console.log("PHOTO-num: ", targetPhotoNum);
+    });
+</script>
