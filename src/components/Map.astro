@@ -1,0 +1,106 @@
+---
+import "leaflet/dist/leaflet.css"; // CSS styles required by Leaflet
+
+const { land } = Astro.props;
+
+// TODO Fix security issue -> the API key should not be revealed to client
+const maptilesAPIKey = import.meta.env.MAPTILES_KEY;
+---
+
+<map-view
+  class="map-view"
+  data-lat={land.coords[0]}
+  data-long={land.coords[1]}
+  data-key={maptilesAPIKey}></map-view>
+
+<style lang="sass">
+  .map-view
+    z-index: 0
+    display: block
+    width: 100%
+    height: 100%
+</style>
+
+<script>
+  import L from "leaflet";
+
+  class MapView extends HTMLElement {
+    static leafletMapOptions = {
+      attributionControl: false,
+      zoomControl: false,
+      scrollWheelZoom: false,
+      minZoom: 6,
+      maxZoom: 18,
+    };
+
+    static leafletPopupOptions = {
+      autoClose: false,
+      closeOnClick: false,
+      closeOnEscapeKey: false,
+      closeButton: false,
+      autoPan: true,
+      riseOnHover: true,
+      className: "map-view__popup",
+    };
+
+    #data = [];
+
+    #map;
+
+    constructor() {
+      super();
+      console.log("Map view constructor");
+
+      // Read data from component data attributes in html
+      this.#data.push({
+        coords: [Number(this.dataset.lat), Number(this.dataset.long)],
+      });
+
+      // Init Leafler Map
+      this.#map = L.map(this, MapView.leafletMapOptions);
+      L.control.zoom({ position: "bottomright" }).addTo(this.#map);
+      L.Control.Button = L.Control.extend({
+        options: {
+          position: "topright",
+        },
+        onAdd: function (map) {
+          var container = L.DomUtil.create(
+            "div",
+            "leaflet-bar leaflet-control"
+          );
+          var button = L.DomUtil.create(
+            "a",
+            "leaflet-control-button",
+            container
+          );
+          L.DomEvent.disableClickPropagation(button);
+          L.DomEvent.on(button, "click", function () {
+            console.log("TODO SCALE MAP FULLSCREEn");
+          });
+
+          container.title = "Title";
+
+          return container;
+        },
+        onRemove: function (map) {},
+      });
+      var control = new L.Control.Button();
+      control.addTo(this.#map);
+
+      // Center on coordinates
+      this.#map.setView(this.#data[0].coords, 9);
+
+      // Make sure markers stay within map frame
+
+      // Load map tiles from open API (TODO pick a nice looking tiles)
+      L.tileLayer(
+        `https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=${
+          document.querySelector(".map-view").dataset.key
+        }`
+      ).addTo(this.#map);
+    }
+  }
+
+  // Tell the browser to use our MapView class for <map-view> elements.
+  customElements.define("map-view", MapView);
+</script>
