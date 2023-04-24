@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import LandPropertiesList from "../components/LandPropertiesList.astro";
 import Map from "../components/Map.astro";
 import PhotoGallery from "../components/PhotoGallery.astro";
+import SuggestionsScroll from "../components/SuggestionsScroll.astro";
 
 import model from "../scripts/contentfulModel";
 
@@ -66,8 +67,11 @@ const { land, suggestedLands } = Astro.props;
       }
     </div>
   </section>
-  <div class="temp">ttt</div>
-  <!-- {suggestedLands.length > 0 && <Suggestions lands={suggestedLands} />} -->
+  {
+    suggestedLands.length > 0 && (
+      <SuggestionsScroll suggestedLandsData={suggestedLands} />
+    )
+  }
 </BaseLayout>
 
 <style lang="sass">
@@ -132,8 +136,4 @@ const { land, suggestedLands } = Astro.props;
         font-size: 1.4rem
         margin-bottom: 1.1rem
         color: inherit
-
-  .temp
-    height: 100vh
-    background: pink
 </style>

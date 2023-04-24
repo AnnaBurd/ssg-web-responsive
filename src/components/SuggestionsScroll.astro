@@ -1,0 +1,161 @@
+---
+import LandCard from "./LandCard.astro";
+
+const { suggestedLandsData } = Astro.props;
+---
+
+<section class="suggestions">
+  <div class="main-container">
+    <div class="suggestions__intro">
+      <h2 class="suggestions__heading nice-h2">Dự án tưởng tượng</h2>
+      <p class="suggestions__text nice-p2">
+        Dự án khác bạn có thể thích tot dep nhat cua cung toi
+      </p>
+    </div>
+  </div>
+  <div class="suggestions__scroll main-container">
+    <div class="suggestions__scroll-track">
+      <div class="suggestions__cards">
+        {suggestedLandsData.map((land) => <LandCard land={land} />)}
+      </div>
+    </div>
+  </div>
+  <div class="suggestions__controls main-container">
+    <div class="control-btn control-btn--prev">
+      <svg class="control-btn__icon">
+        <use href="/icons.svg#arrow-left"></use>
+      </svg>
+    </div>
+    <div class="control-btn control-btn--next">
+      <svg class="control-btn__icon">
+        <use href="/icons.svg#arrow-right"></use>
+      </svg>
+    </div>
+  </div>
+
+  <style lang="sass">
+    .suggestions
+      --cards-per-page: 4
+      --current-page: 0
+      &__intro
+      &__heading
+      &__text
+      &__scroll
+        overflow: hidden
+      &__scroll-track
+        transform: translateX(calc((-100% - var(--grid-gap-small))*(var(--current-page))))
+        transition: transform 3s ease //
+      &__cards
+        display: grid
+        grid-auto-flow: column
+        grid-gap: var(--grid-gap-small)
+        grid-template-rows: 25rem
+        grid-auto-columns: calc((100% - calc(var(--cards-per-page) - 1) * var(--grid-gap-small)) / var(--cards-per-page))
+
+      &__controls
+        display: flex
+        justify-content: right
+        align-items: center
+
+    .control-btn
+      height: 2rem //
+      width: 5rem //
+      cursor: pointer
+      &--prev
+      &--next
+        margin-left: 4rem //
+      &--blocked
+        background: red
+      &__icon
+        width: 100%
+        height: 100%
+  </style>
+
+  <script>
+    import { presets } from "astro/dist/core/config/tsconfig";
+
+    // TODO TEMP remove and assign scroll animations
+    document.querySelectorAll(".land-card").forEach((element) => {
+      element.removeAttribute("data-scroll");
+    });
+
+    /* Arrow navigation functionality */
+    // Html elements
+    const suggestionsEl = document.querySelector(".suggestions");
+    const cardsEl = document.querySelectorAll(".suggestions .land-card");
+    const prevBtnEL = document.querySelector(
+      ".suggestions__controls .control-btn--prev"
+    );
+    const nextBtnEl = document.querySelector(
+      ".suggestions__controls .control-btn--next"
+    );
+
+    // Initial state of scroll
+    let cardsPerPage = Number(
+      getComputedStyle(suggestionsEl).getPropertyValue("--cards-per-page")
+    );
+    let currentPage = Number(
+      getComputedStyle(suggestionsEl).getPropertyValue("--current-page")
+    );
+    let previousPage = -1;
+    let numPages = Math.ceil(cardsEl.length / cardsPerPage);
+
+    let updateControlsState = () => {
+      // Suggestions page did not change
+      if (previousPage === currentPage) return;
+
+      // Got to last page
+      if (currentPage === numPages - 1) {
+        nextBtnEl.classList.add("control-btn--blocked");
+      }
+
+      // Left from last page
+      if (previousPage === numPages - 1) {
+        nextBtnEl.classList.remove("control-btn--blocked");
+      }
+
+      // Got to first page
+      if (currentPage === 0) {
+        prevBtnEL.classList.add("control-btn--blocked");
+      }
+
+      // Left from first  page
+      if (previousPage === 0) {
+        prevBtnEL.classList.remove("control-btn--blocked");
+      }
+    };
+
+    // Hide navigation controls if there is only one page
+    if (numPages <= 1) {
+      prevBtnEL.style.display = "none";
+      nextBtnEl.style.display = "none";
+    }
+
+    // Set up navigation functionality if there are several pages
+    if (numPages > 1) {
+      updateControlsState();
+
+      nextBtnEl.addEventListener("click", () => {
+        previousPage = currentPage;
+
+        if (currentPage >= numPages - 1) return; // Already on last page
+
+        currentPage++;
+        suggestionsEl.style.setProperty("--current-page", currentPage);
+
+        updateControlsState();
+      });
+
+      prevBtnEL.addEventListener("click", () => {
+        previousPage = currentPage;
+
+        if (currentPage <= 0) return;
+
+        currentPage--;
+        suggestionsEl.style.setProperty("--current-page", currentPage);
+
+        updateControlsState();
+      });
+    }
+  </script>
+</section>

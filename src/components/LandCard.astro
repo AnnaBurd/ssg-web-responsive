@@ -31,7 +31,8 @@ const landImgURL = land.images[0];
 
 <style lang="sass">
   .land-card
-    height: 32vh
+    height: 100%
+    width: 100%
     border-radius: var(--border-radius-medium)
     box-shadow: var(--shadow-medium)
     overflow: hidden
@@ -83,11 +84,9 @@ const landImgURL = land.images[0];
         opacity: 1
     /*   Adjust card size and spacing for smaller screens */
     @media only screen and (max-width: 900px)
-      height: 38vh
       &__description
         padding: 1.2rem 2rem 2.2rem
     @media only screen and (max-width: 560px)
-      height: 38vh
       &__description
         padding: 1.2rem 1.5rem 1.8rem
 
