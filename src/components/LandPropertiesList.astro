@@ -63,8 +63,8 @@ const { land } = Astro.props;
         </span>
         <span class="land-prop__text">
           Giá:
-          {land.price}&nbsp;tỷ
-          {((land.price * 1000) / land.area).toFixed(1)}&nbsp;triều/m&sup2
+          {land.price}&nbsp;tỷ ({((land.price * 1000) / land.area).toFixed(1)}
+          &nbsp;triều/m&sup2)
         </span>
       </div>
     )

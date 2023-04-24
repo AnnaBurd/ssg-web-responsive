@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css"; // CSS styles required by Leaflet
 const { land } = Astro.props;
 
 // TODO Fix security issue -> the API key should not be revealed to client
+// SHould use nettlify functions?
 const maptilesAPIKey = import.meta.env.MAPTILES_KEY;
 ---
 
@@ -14,11 +15,20 @@ const maptilesAPIKey = import.meta.env.MAPTILES_KEY;
   data-key={maptilesAPIKey}></map-view>
 
 <style lang="sass">
+  // Note: additional global styles in __map.sass file
+  // (Can not override Leaflet-generated styles directly here because Astro components apply styles only to pre-generated components)
   .map-view
     z-index: 0
     display: block
     width: 100%
     height: 100%
+  .map-view[fullscreen]
+    position: fixed !important
+    z-index: 11
+    top: 0
+    left: 0
+    width: 100vw
+    height: 100vh
 </style>
 
 <script>
@@ -44,8 +54,9 @@ const maptilesAPIKey = import.meta.env.MAPTILES_KEY;
     };
 
     #data = [];
+    #centerCoords;
 
-    #map;
+    #map; // Instance of Leaflet Map
 
     constructor() {
       super();
@@ -56,48 +67,99 @@ const maptilesAPIKey = import.meta.env.MAPTILES_KEY;
         coords: [Number(this.dataset.lat), Number(this.dataset.long)],
       });
 
-      // Init Leafler Map
+      this.#centerCoords = this.#data[0].coords;
+
+      // Init Leaflet Map
       this.#map = L.map(this, MapView.leafletMapOptions);
-      L.control.zoom({ position: "bottomright" }).addTo(this.#map);
+      this.#map.setView(this.#centerCoords, 14); // Position map
+
+      this.initZoomControls();
+      this.initFullscreenControl();
+
+      this.loadTiles();
+
+      this.addMarker(this.#centerCoords); // Refactor
+    }
+
+    initZoomControls() {
+      L.control.zoom({ position: "bottomright" }).addTo(this.#map); // + - zoom buttons
+
+      // Replace default icon
+      document.querySelector(
+        ".leaflet-control-zoom-in"
+      ).innerHTML = `<span class="leaflet-control-icon"><svg xmlns="http://www.w3.org/2000/svg" height="19" viewBox="0 96 960 960" width="19"><path d="M440 856V616H200v-80h240V296h80v240h240v80H520v240h-80Z"/></svg></span>`;
+
+      document.querySelector(
+        ".leaflet-control-zoom-out"
+      ).innerHTML = `<span class="leaflet-control-icon"><svg xmlns="http://www.w3.org/2000/svg" height="19" viewBox="0 96 960 960" width="19"><path d="M200 616v-80h560v80H200Z"/></svg></svg></span>`;
+    }
+
+    initFullscreenControl() {
+      const fullScreenHandler = (e) => {
+        // L.DomEvent.stopPropagation(e);
+        // L.DomEvent.preventDefault(e);
+
+        document.querySelector(".map-view").toggleAttribute("fullscreen");
+
+        this.#map.invalidateSize();
+
+        // In case if css transitions are applied for size switch, resize Leaflet with delay:
+        // setTimeout(
+        //   function () {
+        //     this.#map.invalidateSize();
+        //   }.bind(this),
+        //   400
+        // );
+      };
+
       L.Control.Button = L.Control.extend({
         options: {
           position: "topright",
         },
         onAdd: function (map) {
-          var container = L.DomUtil.create(
+          let container = L.DomUtil.create(
             "div",
             "leaflet-bar leaflet-control"
           );
-          var button = L.DomUtil.create(
+          let button = L.DomUtil.create(
             "a",
             "leaflet-control-button",
             container
           );
           L.DomEvent.disableClickPropagation(button);
-          L.DomEvent.on(button, "click", function () {
-            console.log("TODO SCALE MAP FULLSCREEn");
-          });
-
-          container.title = "Title";
+          L.DomEvent.on(button, "click", fullScreenHandler);
 
           return container;
         },
         onRemove: function (map) {},
       });
-      var control = new L.Control.Button();
-      control.addTo(this.#map);
+      new L.Control.Button().addTo(this.#map);
 
-      // Center on coordinates
-      this.#map.setView(this.#data[0].coords, 9);
+      // Place icon
+      document.querySelector(
+        ".leaflet-control-button"
+      ).innerHTML = `<span class="leaflet-control-icon"><svg class="leaflet-control-icon--fullscreen" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24"><path d="M120 936V696h80v104l124-124 56 56-124 124h104v80H120Zm516-460-56-56 124-124H600v-80h240v240h-80V352L636 476Z"/></svg><svg class="leaflet-control-icon--minimize" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20"><path d="m136 976-56-56 264-264H160v-80h320v320h-80V712L136 976Zm344-400V256h80v184l264-264 56 56-264 264h184v80H480Z"/></svg></span>`;
+    }
 
-      // Make sure markers stay within map frame
-
-      // Load map tiles from open API (TODO pick a nice looking tiles)
+    loadTiles() {
+      // Load map tiles from API // TODO fix the way API KEY is passed // TODO 2 - second API in case one is down
       L.tileLayer(
         `https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=${
           document.querySelector(".map-view").dataset.key
         }`
       ).addTo(this.#map);
+    }
+
+    addMarker(coords) {
+      let icon = L.icon({
+        iconUrl: "/location_marker.svg",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+      });
+
+      L.marker(coords, {
+        icon: icon,
+      }).addTo(this.#map);
     }
   }
 
