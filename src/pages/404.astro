@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout pageTitle="Ups! Error">
+  <span class="decorative">
+    <svg class="decorative__top-right">
+      <use href="/icons.svg#ladder-top-right"></use>
+    </svg>
+  </span>
+  <section class="error main-container">
+    <div class="error__box">
+      <h4 class="error__heading nice-h4">Không tìm thấy trang</h4>
+      <p class="error__message nice-p4">
+        Đã xảy ra lỗi, không tìm thấy trang bạn yêu cầu.
+      </p>
+      <button class="nice-btn nice-btn--secondary" onclick="location.href='/';">
+        Trở lại trang chính
+      </button>
+    </div>
+  </section>
+  <span class="decorative">
+    <svg class="decorative__bottom-left">
+      <use href="/icons.svg#ladder-bottom-left"></use>
+    </svg>
+  </span>
+</BaseLayout>
+
+<style lang="sass">
+  .error
+    height: calc(100vh - var(--navbar-height) - var(--banner-height))
+    display: flex
+    justify-content: center
+    align-items: center
+    &__box
+      min-width: 30rem
+      max-width: 60%
+      border-radius: var(--border-radius-medium)
+      box-shadow: var(--shadow-medium)
+      background-color: var(--color-grey-light-2)
+      padding: 5rem
+      text-align: center
+    &__heading
+      padding-bottom: 1rem
+    &__message
+      padding-bottom: 2.4rem
+</style>

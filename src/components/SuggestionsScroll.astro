@@ -45,6 +45,8 @@ const { suggestedLandsData } = Astro.props;
       --current-page: 0
       margin-top: 9vh
       margin-bottom: 6vh
+      @media only screen and (max-width: 950px)
+        --cards-per-page: 3
       &__intro
         margin-bottom: 2rem
       &__heading

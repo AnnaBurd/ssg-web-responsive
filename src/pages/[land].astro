@@ -100,7 +100,6 @@ const { land, suggestedLands } = Astro.props;
       grid-column: 1/10
       width: 100%
       height: 30vh //
-      // background: red
     /* Photo-gallery land */
     &__photos
       grid-row: 1/2
@@ -113,7 +112,7 @@ const { land, suggestedLands } = Astro.props;
     &__description
       grid-column: 1/10
       background: var(--color-grey-light-2)
-      padding: 2rem 5rem//
+      padding: 2rem 5rem
       .land-desc
         &__heading
           margin-bottom: 1rem
@@ -140,4 +139,26 @@ const { land, suggestedLands } = Astro.props;
         font-size: 1.4rem
         margin-bottom: 1.1rem
         color: inherit
+
+  /*  Adjust for smaller screens */
+  @media only screen and (max-width: 1200px)
+    .land
+      &__description
+        padding: 2rem 3rem
+
+  @media only screen and (max-width: 800px)
+    .land
+      &__info
+        // grid-template-rows: minmax(46vh, 20rem) 1fr 1fr 30vh
+      &__description
+        grid-column: 1/-1
+        grid-row: 2/3
+      &__map
+        grid-column: 1/-1
+        grid-row: 4/5
+      &__sidebar
+        grid-column: 1/-1
+        grid-row: 3/4
+        width: 100%
+        position: inherit
 </style>
