@@ -194,8 +194,6 @@ const { land } = Astro.props;
     }
 
     open(photoNumber) {
-      console.log("Call FullscreenGallery.open() ");
-
       /* Initialize main and thumbnail slides */
       if (!this.#mounted) {
         this.initSliders();
@@ -220,36 +218,14 @@ const { land } = Astro.props;
     initSliders() {
       console.log("Init gallery");
 
-      this.#mainSplide = new Splide(this.#mainSplideEl, {
-        type: "slide",
-        arrowPath:
-          "M25.0132 20.0001L9.84961 35.0808C8.71683 36.2062 8.71683 38.0308 9.84961 39.156C10.9822 40.2813 12.8189 40.2813 13.9518 39.156L31.0186 22.1824C31.6223 21.5828 31.8939 20.7852 31.8542 20.0001C31.8939 19.2149 31.6223 18.4173 31.0186 17.8176L13.9518 0.844067C12.8189 -0.281354 10.9825 -0.281354 9.84961 0.844067C8.71676 1.96949 8.71683 3.79398 9.84961 4.91911L25.0132 20.0001Z", // Arrow ">" path from the svg file, svg must be 40x40 // TODO
-        rewind: false, // No jump from end to start
-        speed: 800, // The transition time in milliseconds
-        perPage: 1, // Images per slide
-        perMove: 1,
-        updateOnMove: true, // Update the is-active status class just before moving the carousel
-        autoplay: false,
-        arrows: true,
-        pagination: false,
-        useIndex: true,
-        drag: true,
-        keyboard: true,
-        lazyLoad: "nearby",
-      });
-      this.#thumbnailSplide = new Splide(this.#thumbnailSplideEl, {
-        direction: "ltr", // Direction of sliding from top-to-bottom
-        width: "100%", // Slider line takes full width of its container (shrinks adaptively for device size)
-        height: "100%", // Slider line takes full height of its container (shrinks adaptively for device size)
-        perPage: 8, // Number of the thumbnail images // TODO dynamic!
-        rewind: false,
-        pagination: false,
-        useIndex: true,
-        focus: "center", // TODO
-        isNavigation: true, // Makes thumbnails clickable
-        arrows: false,
-        updateOnMove: true, //Updates the is-active status class just before moving the carousel for nicer transition
-      });
+      this.#mainSplide = new Splide(
+        this.#mainSplideEl,
+        FullscreenGallery.mainSplideOptions
+      );
+      this.#thumbnailSplide = new Splide(
+        this.#thumbnailSplideEl,
+        FullscreenGallery.thumbnailSplideOptions
+      );
 
       /* Mount and syncronize main with thumbnails */
       this.#mainSplide.sync(this.#thumbnailSplide);
