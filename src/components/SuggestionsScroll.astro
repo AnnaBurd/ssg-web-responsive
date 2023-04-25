@@ -13,10 +13,16 @@ const { suggestedLandsData } = Astro.props;
       </p>
     </div>
   </div>
-  <div class="suggestions__scroll main-container">
-    <div class="suggestions__scroll-track">
-      <div class="suggestions__cards">
-        {suggestedLandsData.map((land) => <LandCard land={land} />)}
+  <div class="suggestions__scroll">
+    <div class="main-container">
+      <div class="suggestions__scroll-track">
+        <div class="suggestions__cards">
+          {
+            suggestedLandsData.map((land) => (
+              <LandCard land={land} small={true} />
+            ))
+          }
+        </div>
       </div>
     </div>
   </div>
@@ -37,14 +43,18 @@ const { suggestedLandsData } = Astro.props;
     .suggestions
       --cards-per-page: 4
       --current-page: 0
+      margin-top: 9vh
+      margin-bottom: 6vh
       &__intro
+        margin-bottom: 2rem
       &__heading
       &__text
       &__scroll
+        margin-bottom: 3vh
         overflow: hidden
       &__scroll-track
         transform: translateX(calc((-100% - var(--grid-gap-small))*(var(--current-page))))
-        transition: transform 3s ease //
+        transition: transform 1.2s cubic-bezier(0.36, 0.09, 0.34, 1.03)
       &__cards
         display: grid
         grid-auto-flow: column
@@ -58,22 +68,24 @@ const { suggestedLandsData } = Astro.props;
         align-items: center
 
     .control-btn
-      height: 2rem //
+      height: 2.7rem //
       width: 5rem //
       cursor: pointer
+      transition: all .8s cubic-bezier(0.645, 0.045, 0.355, 1) 0s
       &--prev
       &--next
         margin-left: 4rem //
       &--blocked
-        background: red
+        opacity: 0
+        cursor: default
+        transition: all .2s cubic-bezier(0.645, 0.045, 0.355, 1) 0s
       &__icon
         width: 100%
         height: 100%
+        fill: var(--color-grey-dark-2)
   </style>
 
   <script>
-    import { presets } from "astro/dist/core/config/tsconfig";
-
     // TODO TEMP remove and assign scroll animations
     document.querySelectorAll(".land-card").forEach((element) => {
       element.removeAttribute("data-scroll");

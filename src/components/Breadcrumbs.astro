@@ -1,0 +1,35 @@
+---
+const { title, link } = Astro.props;
+---
+
+<div class="breadcrumbs">
+  <a href="/search" class="breadcrumbs__link">Xem tất cả</a>
+  <span class="breadcrumbs__icon">
+    <svg>
+      <use href="/icons.svg#chevron-right"></use>
+    </svg></span
+  >
+  <a href={`/${link}`} class="breadcrumbs__link breadcrumbs__link--current"
+    >{title}</a
+  >
+</div>
+<style lang="sass">
+  .breadcrumbs
+    display: flex
+    align-items: center
+    font-size: 1.2rem
+    &__icon
+      width: 1.1em
+      height: 1.1em
+      margin-right: .3em
+      margin-left: .35em
+      svg
+        width: 100%
+        height: 100%
+        fill: currentColor
+    &__link
+      opacity: .9
+    &__link--current
+      font-weight: 600
+      opacity: 1
+</style>

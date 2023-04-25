@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import LandPropertiesList from "../components/LandPropertiesList.astro";
 import Map from "../components/Map.astro";
 import PhotoGallery from "../components/PhotoGallery.astro";
@@ -30,7 +31,9 @@ const { land, suggestedLands } = Astro.props;
 
 <BaseLayout pageTitle={land.title}>
   <section class="land main-container">
-    <div class="land__breadcrumbs">todo breadcrumps {land.title}</div>
+    <div class="land__breadcrumbs">
+      <Breadcrumbs title={land.title} link={land.slug} />
+    </div>
     <div class="land__info">
       <div class="land__photos"><PhotoGallery land={land} /></div>
       <div class="land__description">
@@ -76,8 +79,9 @@ const { land, suggestedLands } = Astro.props;
 
 <style lang="sass">
   .land
-    // background: pink
+    margin-top: 3vh
     &__breadcrumbs
+      margin-bottom: .7rem
     &__info
       display: grid
       grid-template-columns: repeat(12, 1fr)

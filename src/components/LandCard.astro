@@ -1,10 +1,10 @@
 ---
-const { land } = Astro.props;
+const { land, small } = Astro.props;
 const landImgURL = land.images[0];
 ---
 
 <a href={"/" + land.slug}>
-  <div class="land-card" data-scroll>
+  <div class={`land-card ${small ? "land-card--small" : ""}`}>
     <div class="land-card__photo">
       <img
         src={landImgURL || "/no_image.svg"}
@@ -100,4 +100,11 @@ const landImgURL = land.images[0];
     [data-scroll="in"]
       opacity: 1
       transform: translateY(0) scale(1)
+
+  /* Adjustments for smaller cards */
+  .land-card--small
+    .land-card__title
+      font-size: 1.6rem
+    .land-card__description
+      padding: 1.5rem 1.4rem 1.6rem
 </style>
