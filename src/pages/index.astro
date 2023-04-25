@@ -89,7 +89,7 @@ const heroImgURL =
 
 <style lang="sass">
   .hero
-    height: 80vh // Fallback for older browsers
+    height: calc(80vh - var(--banner-height) - var(--navbar-height)) // Fallback for older browsers
     height: calc(80svh - var(--banner-height) - var(--navbar-height))
     display: flex
     flex-direction: column
@@ -115,7 +115,7 @@ const heroImgURL =
       opacity: 1
 
   .lands
-    margin-bottom: 6vh
+    margin-bottom: 6vh !important
     &__intro
       height: 20vh
       display: flex

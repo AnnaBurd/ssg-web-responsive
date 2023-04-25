@@ -32,7 +32,12 @@ const { land, suggestedLands } = Astro.props;
 <BaseLayout pageTitle={land.title}>
   <section class="land main-container">
     <div class="land__breadcrumbs">
-      <Breadcrumbs title={land.title} link={land.slug} />
+      <Breadcrumbs
+        links={[
+          { link: "/tìm-đất", title: "Xem tất cả" },
+          { link: `/${land.slug}`, title: land.title },
+        ]}
+      />
     </div>
     <div class="land__info">
       <div class="land__photos"><PhotoGallery land={land} /></div>

@@ -1,18 +1,36 @@
 ---
-const { title, link } = Astro.props;
+let { links } = Astro.props;
+
+let lastLink = links.pop();
 ---
 
 <div class="breadcrumbs">
-  <a href="/search" class="breadcrumbs__link">Xem tất cả</a>
-  <span class="breadcrumbs__icon">
-    <svg>
-      <use href="/icons.svg#chevron-right"></use>
-    </svg></span
-  >
-  <a href={`/${link}`} class="breadcrumbs__link breadcrumbs__link--current"
-    >{title}</a
-  >
+  {
+    links.map((item, index) => (
+      <>
+        <a href={item.link} class="breadcrumbs__link">
+          {item.title}
+        </a>
+        <span class="breadcrumbs__icon">
+          <svg>
+            <use href="/icons.svg#chevron-right" />
+          </svg>
+        </span>
+      </>
+    ))
+  }
+  {
+    (
+      <a
+        href={lastLink.link}
+        class="breadcrumbs__link breadcrumbs__link--current"
+      >
+        {lastLink.title}
+      </a>
+    )
+  }
 </div>
+
 <style lang="sass">
   .breadcrumbs
     display: flex

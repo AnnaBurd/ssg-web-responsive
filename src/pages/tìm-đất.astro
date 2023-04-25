@@ -1,0 +1,75 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout pageTitle="Tìm kiếm đất" currentPage="search">
+  <section class="hero">
+    <span class="decorative">
+      <svg class="decorative__top-left">
+        <use href="/icons.svg#ladder-top-left"></use>
+      </svg>
+    </span>
+    <div class="hero__form">
+      <form class="search-form">
+        <div class="search-form__tag">Đất đai là nền tảng cho gia đình</div>
+        <h2 class="search-form__heading nice-h2">Tìm đất trong một phút</h2>
+        <p class="search-form__description nice-p2">
+          Hãy là người đầu tiên tìm được ưu đãi tốt nhất không qua trung gian,
+          với tài liệu rõ ràng và khả năng thương lượng giá:
+        </p>
+        <div class="search-form__input-group">slider1</div>
+        <div class="search-form__input-group">slider2</div>
+      </form>
+    </div>
+    <span class="decorative">
+      <svg class="decorative__bottom-right">
+        <use href="/icons.svg#ladder-bottom-right"></use>
+      </svg>
+    </span>
+    <div class="hero__img">img</div>
+  </section>
+  <section class="search-results">
+    <div class="search-results__intro">
+      <h2 class="search-results__heading nice-h2">Miếng đất đang bán</h2>
+      <Breadcrumbs
+        links={[
+          { title: "Xem tất cả", link: "/tìm-đất" },
+          { title: "Sort by", link: "/todo" },
+        ]}
+      />
+    </div>
+    <div>TODO sort by dropdown</div>
+    <div>TODO view results on map</div>
+  </section>
+</BaseLayout>
+
+<style lang="sass">
+  .hero
+    height: calc(100vh - var(--navbar-height) - var(--banner-height))
+    display: flex // Place form and image next to each other
+    &__form
+      flex: 50%
+      /* Center form within its parent */
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+    &__img
+      flex: 50%
+      // TODO image sizes
+      background-image: url('https://images.ctfassets.net/2lc6rsj68vep/14yCI9eRsRcu4qHmvvFjBu/050cee02ccfbcb858df5fbf62bba2bc8/search-hero.jpg')
+      background-repeat: no-repeat
+      background-size: cover
+      background-position: 30% center
+
+  .search-form
+    background: pink
+
+  .search-results
+    background: orangered
+</style>
+
+<script>
+  /* Search form functionality */
+</script>
