@@ -1,29 +1,9 @@
 /*
   Manage application data and provides data to both statically generated page components and dynamically generated components on Client side.
-
-  As of now data does not flow between different pages, but on client side some pages fetch the same data (e.g. map and search), TODO is to consider sharing local storage between pages (e.g. nanostorage?) 
 */
 export class Model {
-  static titleToSlug(title) {
-    return title
-      .toLowerCase()
-      .replace(
-        /[^a-z0-9_,àáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ ]/gu,
-        ""
-      )
-      .replaceAll(" ", "-");
-  }
-
-  lands;
-  dataLoaded;
-
-  constructor() {
-    console.log("Constructor of abstract model");
-  }
-
-  async loadAllLandsData() {
-    console.log("Call of loadAllLandsData() of abstract model");
-  }
+  dataLoaded = false;
+  lands = []; // Lands data
 
   async getAllLandsData() {
     if (!this.dataLoaded) await this.loadAllLandsData();
@@ -35,31 +15,25 @@ export class Model {
     return this.lands.filter((land) => land.promoted);
   }
 
-  // Slugs are unique for each land and can be used as identifiers
-  async getLandData(slug) {
-    if (!this.dataLoaded) await this.loadAllLandsData();
+  getLandData(slug) {
     return this.lands.find((land) => land.slug === slug);
   }
 
   getSuggestedLandsData(land) {
-    if (!land.suggestedLands) {
-      return [];
-    }
+    if (!land.suggestedLands) return [];
 
-    const suggestedLands = land.suggestedLands.map((slug) =>
+    return land.suggestedLands.map((slug) =>
       this.lands.find((land) => land.slug === slug)
     );
-
-    return suggestedLands;
   }
 
-  getMaxLandPrice() {
+  getLandMaxPrice() {
     return this.lands.reduce((max, next) => {
       return next.price > max ? next.price : max;
     }, 0);
   }
 
-  getMaxLandArea() {
+  getLandMaxArea() {
     return this.lands.reduce((max, next) => {
       return next.area > max ? next.area : max;
     }, 0);
@@ -74,7 +48,9 @@ export class Model {
   //     "fields.title, fields.briefDescription, fields.price, fields.location, fields.images",
   // });
   // https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/search-parameters/ranges/query-entries/console/js
-  async searchLands(priceRange, areaRange, sortBy) {
+  async searchLands(priceRange, areaRange, sortBy = "default") {
+    if (!this.dataLoaded) await this.loadAllLandsData();
+
     let [priceMin, priceMax] = priceRange;
     let [areaMin, areaMax] = areaRange;
 
@@ -89,5 +65,16 @@ export class Model {
         if (sortBy === "areaDown") return land2.area - land1.area;
       });
     return searchResults;
+  }
+
+  /* Convert land title into url slug, accepts vietnamese characters */
+  static titleToSlug(title) {
+    return title
+      .toLowerCase()
+      .replace(
+        /[^a-z0-9_,àáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ ]/gu,
+        ""
+      )
+      .replaceAll(" ", "-");
   }
 }

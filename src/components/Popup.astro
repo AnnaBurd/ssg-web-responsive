@@ -146,12 +146,18 @@ const { popupid } = Astro.props;
       if (this.#open) return; // Popup is already visible
 
       this.open = true;
+
+      // Block page scrolling while popup is open
+      document.body.style.overflow = "hidden";
     }
 
     hide() {
       if (!this.#open) return; // Popup is already hidden
 
       this.open = false;
+
+      // Release page scrolling block
+      document.body.style.overflow = "scroll";
     }
   }
 

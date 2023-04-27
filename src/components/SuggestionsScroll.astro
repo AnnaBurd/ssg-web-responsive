@@ -104,72 +104,74 @@ const { suggestedLandsData } = Astro.props;
       ".suggestions__controls .control-btn--next"
     );
 
-    // Initial state of scroll
-    let cardsPerPage = Number(
-      getComputedStyle(suggestionsEl).getPropertyValue("--cards-per-page")
-    );
-    let currentPage = Number(
-      getComputedStyle(suggestionsEl).getPropertyValue("--current-page")
-    );
-    let previousPage = -1;
-    let numPages = Math.ceil(cardsEl.length / cardsPerPage);
+    if (suggestionsEl) {
+      // Initial state of scroll
+      let cardsPerPage = Number(
+        getComputedStyle(suggestionsEl).getPropertyValue("--cards-per-page")
+      );
+      let currentPage = Number(
+        getComputedStyle(suggestionsEl).getPropertyValue("--current-page")
+      );
+      let previousPage = -1;
+      let numPages = Math.ceil(cardsEl.length / cardsPerPage);
 
-    let updateControlsState = () => {
-      // Suggestions page did not change
-      if (previousPage === currentPage) return;
+      let updateControlsState = () => {
+        // Suggestions page did not change
+        if (previousPage === currentPage) return;
 
-      // Got to last page
-      if (currentPage === numPages - 1) {
-        nextBtnEl.classList.add("control-btn--blocked");
+        // Got to last page
+        if (currentPage === numPages - 1) {
+          nextBtnEl.classList.add("control-btn--blocked");
+        }
+
+        // Left from last page
+        if (previousPage === numPages - 1) {
+          nextBtnEl.classList.remove("control-btn--blocked");
+        }
+
+        // Got to first page
+        if (currentPage === 0) {
+          prevBtnEL.classList.add("control-btn--blocked");
+        }
+
+        // Left from first  page
+        if (previousPage === 0) {
+          prevBtnEL.classList.remove("control-btn--blocked");
+        }
+      };
+
+      // Hide navigation controls if there is only one page
+      if (numPages <= 1) {
+        prevBtnEL.style.display = "none";
+        nextBtnEl.style.display = "none";
       }
 
-      // Left from last page
-      if (previousPage === numPages - 1) {
-        nextBtnEl.classList.remove("control-btn--blocked");
-      }
-
-      // Got to first page
-      if (currentPage === 0) {
-        prevBtnEL.classList.add("control-btn--blocked");
-      }
-
-      // Left from first  page
-      if (previousPage === 0) {
-        prevBtnEL.classList.remove("control-btn--blocked");
-      }
-    };
-
-    // Hide navigation controls if there is only one page
-    if (numPages <= 1) {
-      prevBtnEL.style.display = "none";
-      nextBtnEl.style.display = "none";
-    }
-
-    // Set up navigation functionality if there are several pages
-    if (numPages > 1) {
-      updateControlsState();
-
-      nextBtnEl.addEventListener("click", () => {
-        previousPage = currentPage;
-
-        if (currentPage >= numPages - 1) return; // Already on last page
-
-        currentPage++;
-        suggestionsEl.style.setProperty("--current-page", currentPage);
-
+      // Set up navigation functionality if there are several pages
+      if (numPages > 1) {
         updateControlsState();
-      });
 
-      prevBtnEL.addEventListener("click", () => {
-        previousPage = currentPage;
+        nextBtnEl.addEventListener("click", () => {
+          previousPage = currentPage;
 
-        if (currentPage <= 0) return;
+          if (currentPage >= numPages - 1) return; // Already on last page
 
-        currentPage--;
-        suggestionsEl.style.setProperty("--current-page", currentPage);
+          currentPage++;
+          suggestionsEl.style.setProperty("--current-page", currentPage);
 
-        updateControlsState();
-      });
+          updateControlsState();
+        });
+
+        prevBtnEL.addEventListener("click", () => {
+          previousPage = currentPage;
+
+          if (currentPage <= 0) return;
+
+          currentPage--;
+          suggestionsEl.style.setProperty("--current-page", currentPage);
+
+          updateControlsState();
+        });
+      }
     }
   </script>
 </section>

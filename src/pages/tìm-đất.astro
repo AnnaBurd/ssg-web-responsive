@@ -2,6 +2,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Slider from "../components/ui/Slider.astro";
+
+import model from "../scripts/contentfulModel";
+
+await model.loadAllLandsData();
+
+const maxArea = Math.ceil(model.getLandMaxArea() / 100) * 100;
+const maxPrice = Math.ceil(model.getLandMaxPrice() / 10) * 10;
 ---
 
 <BaseLayout pageTitle="Tìm kiếm đất" currentPage="search">
@@ -24,13 +31,13 @@ import Slider from "../components/ui/Slider.astro";
         <div class="search-form__input-group">
           <div class="search-form__input-label">Diện tích:</div>
           <div class="search-form__input-slider">
-            <Slider min={23} max={111} id="sliderArea" />
+            <Slider min={0} max={maxArea} id="sliderArea" />
           </div>
         </div>
         <div class="search-form__input-group">
           <div class="search-form__input-label">Giá mỗi lô:</div>
           <div class="search-form__input-slider">
-            <Slider min={1} max={100000} id="sliderPrice" />
+            <Slider min={0} max={maxPrice} id="sliderPrice" />
           </div>
         </div>
         <button class="search-form__button nice-btn nice-btn--primary"
@@ -45,7 +52,7 @@ import Slider from "../components/ui/Slider.astro";
     </span>
     <div class="hero__img"></div>
   </section>
-  <section class="search-results">
+  <section class="search-results main-container">
     <div class="search-results__intro">
       <h2 class="search-results__heading nice-h2">Miếng đất đang bán</h2>
       <Breadcrumbs
@@ -55,8 +62,86 @@ import Slider from "../components/ui/Slider.astro";
         ]}
       />
     </div>
-    <div>TODO sort by dropdown</div>
-    <div>TODO view results on map</div>
+    <div class="search-results__controls">
+      <div>TODO sort by dropdown</div>
+      <div>TODO view results on map</div>
+    </div>
+    <div class="search-results__cards">
+      <!-- <div class="land-card">
+        <div class="land-card__gallery">
+          <div
+            class="splide main-splide"
+            aria-label="${land.title} land photos"
+          >
+            <div class="splide__track">
+              <ul class="splide__list">
+                <li class="splide__slide">
+                  <img data-splide-lazy="#" alt="" />
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <a href="" class="land-card__link"
+          ><div class="land-card__info">
+            <h4 class="land-card__title nice-h4">title</h4>
+            <div class="land-card__description nice-p4">description</div>
+            <div class="land-props">
+              <div class="land-prop land-prop--address">
+                <span class="land-prop__icon">
+                  <svg>
+                    <use xlink:href="/icons.svg#icon-location-2"></use>
+                  </svg>
+                </span>
+                <span class="land-prop__text">Địa chỉ: 123</span>
+              </div>
+
+              <div class="land-prop">
+                <span class="land-prop__icon">
+                  <svg>
+                    <use xlink:href="/icons.svg#icon-area"></use>
+                  </svg>
+                </span>
+                <span class="land-prop__text"> Điện tích: 100&nbsp;m&sup2</span>
+              </div>
+
+              <div class="land-prop">
+                <span class="land-prop__icon">
+                  <svg>
+                    <use xlink:href="/icons.svg#icon-faceside"></use>
+                  </svg>
+                </span>
+                <span class="land-prop__text"> Mặt tiền: &nbsp;m</span>
+              </div>
+
+              <div class="land-prop">
+                <span class="land-prop__icon">
+                  <svg>
+                    <use xlink:href="/icons.svg#icon-papers-3"></use>
+                  </svg>
+                </span>
+                <span class="land-prop__text"> Giấy tờ pháp lý:</span>
+              </div>
+
+              <div class="land-prop">
+                <span class="land-prop__icon">
+                  <svg>
+                    <use xlink:href="/icons.svg#icon-price"></use>
+                  </svg>
+                </span>
+                <span class="land-prop__text"> Giá:</span>
+              </div>
+            </div>
+          </div>
+          <div class="land-card__tag price-tag">
+            <span class="land-card__area price-tag__area">1324 m&sup2</span
+            ><span class="land-card__price price-tag__price">23.5&nbsp;</span
+            ><span class="price-tag__price-units"> tỷ</span>
+          </div>
+          <div class="land-card__btn">+</div>
+        </a>
+      </div> -->
+    </div>
   </section>
 </BaseLayout>
 
@@ -115,15 +200,211 @@ import Slider from "../components/ui/Slider.astro";
       background: var(--color-intermediate-1)
 
   .search-results
-    background: orangered
+    // background: orangered
+    &__intro
+    &__controls
+      // background: yellow
+    &__cards
 </style>
 
+<style lang="sass" is:global>
+  /* Style dynamally fetched, large land cards */
+  .land-card
+    background-color: var(--color-grey-light-2)
+    padding: .8rem // TODO
+    border-radius: var(--border-radius-medium)
+    box-shadow: var(--shadow-medium)
+    margin-bottom: 3rem // TODO
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-template-rows: 30vh
+    grid-gap: 2%
+    position: relative
+
+    /* Style info about land */
+    &__info
+      // background: orange
+    &__title
+      // background: red
+      margin-bottom: .1rem
+    &__description
+      max-width: 85%
+      margin-bottom: 1.4rem
+
+    .land-props
+      // background: red
+      font-size: 1rem
+      max-width: 85%
+      .land-prop
+        margin-bottom: 1rem
+      .land-prop--address
+        max-width: 100%
+      .land-prop__text
+        font-size: 1.1rem
+        font-weight: 400
+
+    &__tag // TODO tag down?
+      position: absolute
+      bottom: .8rem
+      right: 1.2rem
+      transform: scale(.95)
+    &__btn
+      position: absolute
+      top: .6rem // TODO
+      right: 1rem // TODO
+
+  /* Style gallery */
+  .land-card
+    &__gallery
+      display: grid
+      grid-template-columns: 1fr 8rem
+      grid-template-rows: 100%
+      grid-gap: .8rem//
+
+      /* Fit slides into gallery container */
+      .splide__track
+        height: 100%
+      .splide__slide
+        img
+          width: 100%
+          height: 100%
+          object-fit: cover
+
+      /* Navigation arrows */
+      .splide__arrows
+        .splide__arrow
+          width: 3rem
+          min-height: 3rem
+          border-radius: var(--border-radius-medium)
+          background-color: var(--color-intermediate-4)
+
+      /* Hide and show navigation arrows */
+      .splide__arrows
+        .splide__arrow
+          opacity: 0
+          transition: opacity .3s
+
+      .main-splide:hover
+        .splide__arrows
+          .splide__arrow
+            opacity: .8
+            transition: opacity .5s
+            &:disabled
+              opacity: .3
+
+      /* Style main splide */
+      .main-splide
+        border-radius: var(--border-radius-medium)
+        overflow: hidden
+
+      /* Style thumbmail splide */
+      .thumbnail-splide
+        .splide__slide
+          padding: .1rem
+          border: .2rem solid transparent
+          opacity: 0.85
+          transition: opacity .2s
+          img
+            border-radius: calc(var(--border-radius-medium) * 0.6)
+        .splide__slide.is-active
+          border: .2rem solid var(--color-secondary)
+          border-radius: calc(var(--border-radius-medium) * 0.6)
+          opacity: 1
+</style>
+
+<!-- <time-formatted id="elem" hour="numeric" minute="numeric" second="numeric"
+></time-formatted> -->
+
 <script>
+  import "../scripts/views/searchCardView";
+
+  import model from "../scripts/clientModel";
+  import SearchCardView from "../scripts/views/searchCardView";
   /* Search form functionality */
 
-  // setTimeout(function () {
-  //   let formSliderPrice = document.getElementById("sliderPrice");
-  //   console.log(formSliderPrice);
-  //   console.log(formSliderPrice.getValues());
-  // }, 1000);
+  // Get links to input form and output container
+  const formEl = document.querySelector(".search-form");
+  const resultsSectionEl = document.querySelector("section.search-results");
+  const resultsContainerEl = document.querySelector(".search-results__cards");
+  const sliderAreaEl = formEl.querySelector("#sliderArea");
+  const sliderPriceEl = formEl.querySelector("#sliderPrice");
+
+  const formSubmissionHandler = async (e) => {
+    e.preventDefault(); // Do not reload page
+
+    // Read search and sort values
+    let priceRange = sliderPriceEl
+      .getValues()
+      .map((val) => Number.parseInt(val.replaceAll(" ", "")));
+
+    let areaRange = sliderAreaEl
+      .getValues()
+      .map((val) => Number.parseInt(val.replaceAll(" ", "")));
+
+    // Render results
+    clearPreviousResults();
+
+    // Fetch data
+    const results = await fetchSearchResults(priceRange, areaRange);
+
+    if (results.length === 0) {
+      renderErrorMessage("No results! ");
+    } else {
+      renderSearchResults(results);
+    }
+
+    // Focus view on results
+    // TODO refactor
+    // Get value in units defined in CSS (Rem)
+    const stickyHeadingHeight = window
+      .getComputedStyle(document.documentElement)
+      .getPropertyValue("--navbar-height");
+
+    // Calculate value in pixels
+    const offsetInPixels =
+      parseFloat(stickyHeadingHeight) *
+      parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+    const resultsTop =
+      resultsSectionEl.getBoundingClientRect().top +
+      window.scrollY -
+      offsetInPixels;
+    window.scroll({ top: resultsTop, behavior: "smooth" });
+  };
+
+  const fetchSearchResults = async (
+    priceRange = [0, 100],
+    areaRange = [0, 100000]
+  ) => {
+    const results = await model.searchLands(priceRange, areaRange);
+
+    await model.updateLandsAddresses(results);
+
+    return results;
+  };
+
+  const renderSearchResults = (data) => {
+    console.log("Going to render", data);
+
+    data.forEach((land) => {
+      new SearchCardView(land, resultsContainerEl).render();
+    });
+  };
+
+  const renderErrorMessage = (msg) => {
+    console.log("Error message: ", msg);
+    resultsContainerEl.innerHTML = "No such lands, sorry :(";
+  };
+
+  const clearPreviousResults = () => {
+    resultsContainerEl.innerHTML = "";
+  };
+
+  // Start preloading data in advance
+  //...
+  renderSearchResults(await fetchSearchResults());
+
+  formEl.addEventListener("submit", formSubmissionHandler);
 </script>
+
+<!-- TODO - https://github.com/AnnaBurd/ssg-web-app/blob/main/src/scripts/searchApp.js and ability to copy link with search results -->

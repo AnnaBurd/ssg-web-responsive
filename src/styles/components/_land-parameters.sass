@@ -1,3 +1,4 @@
+/* Styles are applied to both pregenerated html and to dynamically added elements */
 .price-tag
     font-family: var(--font-family-display)
     color: var(--color-grey-dark-2)
@@ -32,3 +33,33 @@
             -webkit-text-fill-color: transparent
             background-clip: text
             text-fill-color: transparent
+
+
+.land-props
+    // background: pink
+    .land-prop:not(.land-prop--link)
+        display: flex
+        align-items: center
+        margin-bottom: 1.4rem
+    .land-prop--link
+        margin-top: 1rem
+        margin-left: -0.5rem
+        text-decoration: underline
+    .land-prop--address
+        max-width: 25rem // Prevent overstretching of address line
+    .land-prop
+        color: inherit
+        &__icon
+            width: 1.2em
+            height: 1.2em
+            flex: 0 0 1.2em
+            fill: var(--color-intermediate-3)
+            svg
+                width: 100%
+                height: 100%
+        &__text
+            font-family: var(--font-family-display)
+            font-size: 1.2rem
+            font-weight: 500
+            line-height: 1.2rem
+            margin-left: .5rem

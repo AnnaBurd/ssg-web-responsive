@@ -112,12 +112,9 @@ const { id, min, max } = Astro.props;
         ((maxValue - minValue) / maxValue) * 15, // TODO adjust
         " - "
       );
-
-      console.log(this.getValues());
     }
 
     getValues() {
-      console.log("Call get values");
       return this.#slider.get();
     }
 

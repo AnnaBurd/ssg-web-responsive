@@ -11,13 +11,15 @@ import model from "../scripts/contentfulModel";
 /* Generate static pages for all land items */
 export async function getStaticPaths() {
   // Load land data
-  const allLandsData = await model.getAllLandsDataWithAddresses();
+  const allLandsData = await model.getAllLandsData();
+  // await model.updateLandsAddresses(allLandsData); // TODO uncomment
 
-  // Transform data and pass to Astro pages generator
+  // Pass data to Astro pages generator
   return allLandsData.map((land) => {
     return {
-      params: { land: land.slug },
+      params: { land: land.slug }, // Page url
       props: {
+        // Data each page gets
         land,
         suggestedLands: model.getSuggestedLandsData(land),
       },

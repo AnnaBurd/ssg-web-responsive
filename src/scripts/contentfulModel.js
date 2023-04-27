@@ -4,10 +4,8 @@
 import * as contentful from "contentful";
 import { Model } from "./model";
 
-class ClientModel extends Model {
-  #client;
-  lands = [];
-  dataLoaded = false;
+class ContentfulModel extends Model {
+  #contentfulClient;
 
   constructor() {
     super();
@@ -21,10 +19,7 @@ class ClientModel extends Model {
     const contentfulEnvironmentName = import.meta.env.CONTENTFUL_ENVIRONMENT;
     const contentfulAPIKey = import.meta.env.CONTENTFUL_DELIVERY_TOKEN;
 
-    // Or read API keys from tocken passed to client //
-    // TODO     // TODO hide API keys (options - cookie / embed in html (simplest and ok for this case) / Use astro's inline js <script define:vars={{init}}>)
-
-    this.#client = createClientFunc({
+    this.#contentfulClient = createClientFunc({
       space: contentfulSpaceID,
       environment: contentfulEnvironmentName,
       accessToken: contentfulAPIKey,
@@ -37,11 +32,11 @@ class ClientModel extends Model {
     this.dataLoaded = false;
 
     // Fetch data from cms
-    const entries = await this.#client.getEntries({
+    const entries = await this.#contentfulClient.getEntries({
       content_type: "land",
     });
 
-    // Apply data transformations
+    // Transform JSON into land objects
     const lands = entries.items.map(this.#entryItemToLand.bind(this));
 
     // Update model state
@@ -50,13 +45,13 @@ class ClientModel extends Model {
   }
 
   /* Get land address using API and reverse geocoding */
-  async loadAllLandsGeodata() {
+  async updateLandsAddresses(lands) {
     // Do not forget to set up API keys in Netlify environment
     const geoapifyAPIKey = import.meta.env.GEOAPIFY_KEY;
     const url = `https://api.geoapify.com/v1/batch?apiKey=${geoapifyAPIKey}`;
 
     // Form API Request Body as in the documentation https://www.geoapify.com/solutions/batch-geocoding-requests
-    const requestInputs = this.lands
+    const requestInputs = lands
       .filter((land) => land.coords[0]) // Use only lands with specified coordinates
       .map((land) => {
         return {
@@ -141,7 +136,7 @@ class ClientModel extends Model {
     // After all addresses are fetched, add them into the existing lands data
     addresses?.results.forEach((addr) => {
       // Find land the address was fetched for
-      let land = this.lands.find((land) => land.slug === addr.id);
+      let land = lands.find((land) => land.slug === addr.id);
 
       // And pass to it address value
       land.address = addr.result.features[0].properties.formatted.replace(
@@ -151,13 +146,7 @@ class ClientModel extends Model {
     });
   }
 
-  async getAllLandsDataWithAddresses() {
-    await this.loadAllLandsData();
-    // await this.loadAllLandsGeodata(); // TODO temp - remove for faster development
-    return this.lands;
-  }
-
-  // Parse entry fetched from CMS to a land object
+  // Parse land json (as fetched from contentful CMS) to a land object
   #entryItemToLand(item) {
     const longDescriptionOfLand = item.fields.longDescription?.content.flatMap(
       (descrNode) => {
@@ -201,4 +190,4 @@ class ClientModel extends Model {
   }
 }
 
-export default new ClientModel();
+export default new ContentfulModel();
