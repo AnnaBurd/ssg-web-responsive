@@ -1,12 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Dropdown from "../components/ui/Dropdown.astro";
 import Slider from "../components/ui/Slider.astro";
 
 import model from "../scripts/contentfulModel";
 
 await model.loadAllLandsData();
-
 const maxArea = Math.ceil(model.getLandMaxArea() / 100) * 100;
 const maxPrice = Math.ceil(model.getLandMaxPrice() / 10) * 10;
 ---
@@ -55,93 +54,22 @@ const maxPrice = Math.ceil(model.getLandMaxPrice() / 10) * 10;
   <section class="search-results main-container">
     <div class="search-results__intro">
       <h2 class="search-results__heading nice-h2">Miếng đất đang bán</h2>
-      <Breadcrumbs
-        links={[
-          { title: "Xem tất cả", link: "/tìm-đất" },
-          { title: "Sort by", link: "/todo" },
-        ]}
-      />
+      <p class="search-results__text nice-p2">
+        Miếng đất đang bán lorem impsum lorem ipsum lorem impsum
+      </p>
     </div>
     <div class="search-results__controls">
-      <div>TODO sort by dropdown</div>
-      <div>TODO view results on map</div>
+      <Dropdown />
+      <button
+        class="search-results__btn nice-btn nice-btn--transparent nice-btn--map"
+      >
+        <svg class="nice-btn__icon">
+          <use xlink:href="/icons.svg#map"></use>
+        </svg>
+        Xem tren ban do
+      </button>
     </div>
-    <div class="search-results__cards">
-      <!-- <div class="land-card">
-        <div class="land-card__gallery">
-          <div
-            class="splide main-splide"
-            aria-label="${land.title} land photos"
-          >
-            <div class="splide__track">
-              <ul class="splide__list">
-                <li class="splide__slide">
-                  <img data-splide-lazy="#" alt="" />
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <a href="" class="land-card__link"
-          ><div class="land-card__info">
-            <h4 class="land-card__title nice-h4">title</h4>
-            <div class="land-card__description nice-p4">description</div>
-            <div class="land-props">
-              <div class="land-prop land-prop--address">
-                <span class="land-prop__icon">
-                  <svg>
-                    <use xlink:href="/icons.svg#icon-location-2"></use>
-                  </svg>
-                </span>
-                <span class="land-prop__text">Địa chỉ: 123</span>
-              </div>
-
-              <div class="land-prop">
-                <span class="land-prop__icon">
-                  <svg>
-                    <use xlink:href="/icons.svg#icon-area"></use>
-                  </svg>
-                </span>
-                <span class="land-prop__text"> Điện tích: 100&nbsp;m&sup2</span>
-              </div>
-
-              <div class="land-prop">
-                <span class="land-prop__icon">
-                  <svg>
-                    <use xlink:href="/icons.svg#icon-faceside"></use>
-                  </svg>
-                </span>
-                <span class="land-prop__text"> Mặt tiền: &nbsp;m</span>
-              </div>
-
-              <div class="land-prop">
-                <span class="land-prop__icon">
-                  <svg>
-                    <use xlink:href="/icons.svg#icon-papers-3"></use>
-                  </svg>
-                </span>
-                <span class="land-prop__text"> Giấy tờ pháp lý:</span>
-              </div>
-
-              <div class="land-prop">
-                <span class="land-prop__icon">
-                  <svg>
-                    <use xlink:href="/icons.svg#icon-price"></use>
-                  </svg>
-                </span>
-                <span class="land-prop__text"> Giá:</span>
-              </div>
-            </div>
-          </div>
-          <div class="land-card__tag price-tag">
-            <span class="land-card__area price-tag__area">1324 m&sup2</span
-            ><span class="land-card__price price-tag__price">23.5&nbsp;</span
-            ><span class="price-tag__price-units"> tỷ</span>
-          </div>
-          <div class="land-card__btn">+</div>
-        </a>
-      </div> -->
-    </div>
+    <div class="search-results__cards"></div>
   </section>
 </BaseLayout>
 
@@ -200,10 +128,18 @@ const maxPrice = Math.ceil(model.getLandMaxPrice() / 10) * 10;
       background: var(--color-intermediate-1)
 
   .search-results
+    margin-top: 6vh //
+    margin-bottom: 6vh
+    padding-top: 6vh
     // background: orangered
     &__intro
     &__controls
       // background: yellow
+      display: flex
+      justify-content: space-between
+      align-items: center
+      margin-bottom: 3rem //
+      margin-top: 1rem //
     &__cards
 </style>
 
@@ -226,32 +162,33 @@ const maxPrice = Math.ceil(model.getLandMaxPrice() / 10) * 10;
       // background: orange
     &__title
       // background: red
+      margin-top: .2rem
       margin-bottom: .1rem
     &__description
-      max-width: 85%
-      margin-bottom: 1.4rem
+      max-width: 78%
+      margin-bottom: 1.8rem
 
     .land-props
       // background: red
       font-size: 1rem
       max-width: 85%
       .land-prop
-        margin-bottom: 1rem
+        margin-bottom: 1.2rem
       .land-prop--address
         max-width: 100%
       .land-prop__text
         font-size: 1.1rem
         font-weight: 400
 
-    &__tag // TODO tag down?
+    &__tag
       position: absolute
-      bottom: .8rem
-      right: 1.2rem
+      top: .4rem
+      right: 1.3rem
       transform: scale(.95)
     &__btn
       position: absolute
-      top: .6rem // TODO
-      right: 1rem // TODO
+      bottom: .8rem
+      right: .98rem
 
   /* Style gallery */
   .land-card
@@ -276,19 +213,19 @@ const maxPrice = Math.ceil(model.getLandMaxPrice() / 10) * 10;
           width: 3rem
           min-height: 3rem
           border-radius: var(--border-radius-medium)
-          background-color: var(--color-intermediate-4)
+          background-color: var(--color-grey-light-1)
 
       /* Hide and show navigation arrows */
       .splide__arrows
         .splide__arrow
           opacity: 0
-          transition: opacity .3s
+          transition: opacity .3s ease
 
       .main-splide:hover
         .splide__arrows
           .splide__arrow
             opacity: .8
-            transition: opacity .5s
+            transition: opacity .6s
             &:disabled
               opacity: .3
 
@@ -311,9 +248,6 @@ const maxPrice = Math.ceil(model.getLandMaxPrice() / 10) * 10;
           border-radius: calc(var(--border-radius-medium) * 0.6)
           opacity: 1
 </style>
-
-<!-- <time-formatted id="elem" hour="numeric" minute="numeric" second="numeric"
-></time-formatted> -->
 
 <script>
   import "../scripts/views/searchCardView";
@@ -378,7 +312,7 @@ const maxPrice = Math.ceil(model.getLandMaxPrice() / 10) * 10;
   ) => {
     const results = await model.searchLands(priceRange, areaRange);
 
-    await model.updateLandsAddresses(results);
+    // await model.updateLandsAddresses(results);
 
     return results;
   };

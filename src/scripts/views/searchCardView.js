@@ -72,7 +72,11 @@ export default class SearchCardView {
             )}&nbsp;</span
             ><span class="price-tag__price-units"> tỷ</span>
           </div>
-          <div class="land-card__btn">+ TODO</div>
+          <button class="land-card__btn nice-btn nice-btn--transparent nice-btn--icon">
+            <svg class="nice-btn__icon">
+              <use xlink:href="/icons.svg#share"></use>
+            </svg>
+          </button>
         </a>
       </div>`;
 
